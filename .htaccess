@@ -1,0 +1,6 @@
+Options All -Indexes
+
+<Files composer.json>
+    Order allow,deny
+    Deny from all
+</Files>
