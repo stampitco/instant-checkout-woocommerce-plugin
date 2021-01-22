@@ -7,11 +7,10 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Stamp_IC_WooCommerce_Plugin {
 
-	protected $loaders = array();
+	/* @var Stamp_IC_WC_DI_Container $container */
+	protected $container;
 
-	public function __construct( array $loaders ) {
-		$this->set_loaders( $loaders );
-	}
+	protected $loaders = array();
 
 	/**
 	 * @return array
@@ -20,10 +19,7 @@ class Stamp_IC_WooCommerce_Plugin {
 		return $this->loaders;
 	}
 
-	/**
-	 * @param array $loaders
-	 */
-	public function set_loaders( array $loaders ): void {
+	public function set_loaders( array $loaders ): Stamp_IC_WooCommerce_Plugin {
 
 		/* @var Stamp_IC_WooCommerce_Abstract_Loader $loader */
 		foreach ( $loaders as $loader ) {
@@ -39,6 +35,25 @@ class Stamp_IC_WooCommerce_Plugin {
 		}
 
 		$this->loaders = $loaders;
+
+		return $this;
+	}
+
+	/**
+	 * @return Stamp_IC_WC_DI_Container
+	 */
+	public function get_container(): Stamp_IC_WC_DI_Container {
+		return $this->container;
+	}
+
+	/**
+	 * @param Stamp_IC_WC_DI_Container $container
+	 *
+	 * @return Stamp_IC_WooCommerce_Plugin
+	 */
+	public function set_container( Stamp_IC_WC_DI_Container $container ): Stamp_IC_WooCommerce_Plugin {
+		$this->container = $container;
+		return $this;
 	}
 
 	public function init_loaders() {

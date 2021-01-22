@@ -7,3 +7,5 @@ mix.webpackConfig(webpack => {
         }
     };
 });
+
+mix.js('assets/admin/settings/js/index.js', 'assets/dist/admin/js/settings.js');

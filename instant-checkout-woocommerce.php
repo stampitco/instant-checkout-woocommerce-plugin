@@ -49,7 +49,7 @@ function activate_stamp_ic_wc() {
 	$activator->activate( apply_filters( 'active_plugins', get_option('active_plugins' ) ) );
 }
 
-function deactivate_bg_email_octopus_connector() {
+function deactivate_stamp_ic_wc() {
 	$deactivator = new Stamp_IC_WC_Deactivator();
 	$deactivator->deactivate();
 }
@@ -68,8 +68,25 @@ function run_stamp_ic_wc() {
 		return;
 	}
 
-	$plugin = new Stamp_IC_WooCommerce_Plugin( array() );
-	$plugin->run();
+	$container = Stamp_IC_WC_DI_Container::instance();
+
+	$container->addServiceProvider( new Stamp_IC_WC_Settings_Service_Provider() );
+	$container->addServiceProvider( new Stamp_IC_WC_Admin_Service_Provider() );
+//	$container->addServiceProvider( new Stamp_IC_WC_Stamp_Service_Provider() );
+	$container->addServiceProvider( new Stamp_IC_WC_Assets_Service_Provider() );
+
+	$plugin = new Stamp_IC_WooCommerce_Plugin();
+
+	$plugin->set_container( $container )
+			->set_loaders(
+				array(
+					$container->get( 'Stamp_IC_WC_Settings_Loader' ),
+					$container->get( 'Stamp_IC_WC_Admin_Loader' ),
+//					$container->get( 'Stamp_IC_WC_Stamp_Loader' ),
+					$container->get( 'Stamp_IC_WC_Assets_Loader' ),
+				)
+			)
+			->run();
 }
 
 add_action( 'plugins_loaded', 'run_stamp_ic_wc' );

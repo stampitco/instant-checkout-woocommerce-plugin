@@ -7,6 +7,9 @@ if ( ! defined( 'WPINC' ) ) {
 
 abstract class Stamp_IC_WooCommerce_Abstract_Loader {
 
+	/* @var Stamp_IC_WC_DI_Container $container */
+	protected $container;
+
 	protected $commands = array();
 
 	abstract public function run();
@@ -37,6 +40,23 @@ abstract class Stamp_IC_WooCommerce_Abstract_Loader {
 		}
 
 		$this->commands = $commands;
+	}
+
+	/**
+	 * @return Stamp_IC_WC_DI_Container
+	 */
+	public function get_container(): Stamp_IC_WC_DI_Container {
+		return $this->container;
+	}
+
+	/**
+	 * @param Stamp_IC_WC_DI_Container $container
+	 *
+	 * @return Stamp_IC_WooCommerce_Abstract_Loader
+	 */
+	public function set_container( Stamp_IC_WC_DI_Container $container ): Stamp_IC_WooCommerce_Abstract_Loader {
+		$this->container = $container;
+		return $this;
 	}
 
 	public function register_cli_commands() {}
