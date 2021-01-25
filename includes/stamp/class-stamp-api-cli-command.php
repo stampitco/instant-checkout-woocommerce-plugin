@@ -28,20 +28,69 @@ class Stamp_IC_WC_Api_Cli_Command extends Stamp_IC_WooCommerce_Abstract_Cli_Comm
 	}
 
 	public function name(): string {
-		return 'api';
+		return 'stamp-api';
 	}
 
 	public function short_description(): string {
-		return 'Save plugin settings';
+		return 'Interact with Stamp API from the cli';
 	}
 
 	public function synopsis(): array {
 		return array(
-
+			array(
+				'description' => 'Which action to perform against the Stamp API',
+				'type' => 'assoc',
+				'name' => 'action',
+				'optional' => false,
+				'options' => array(
+					'set_settings',
+				),
+			),
+			array(
+				'description' => 'WC consumer key',
+				'type' => 'assoc',
+				'name' => 'wc_consumer_key',
+				'optional' => true,
+			),
+			array(
+				'description' => 'WC consumer secret',
+				'type' => 'assoc',
+				'name' => 'wc_consumer_secret',
+				'optional' => true,
+			),
 		);
 	}
 
 	public function run( $args, $assoc_args ) {
+		if( $assoc_args[ 'action' ] === 'set_settings' ) {
+			$this->set_settings( $args, $assoc_args );
+		}
+	}
+
+	protected function set_settings( $args, $assoc_args ) {
+
+		if( empty( $assoc_args[ 'wc_consumer_key' ] ) ) {
+			WP_CLI::error(
+				'Please provide wc_consumer_key option'
+			);
+		}
+
+		if( empty( $assoc_args[ 'wc_consumer_secret' ] ) ) {
+			WP_CLI::error(
+				'Please provide wc_consumer_secret option'
+			);
+		}
+
+		$result = $this->api_client->save_wc_credentials( array(
+			'ConsumerKey' => $assoc_args[ 'wc_consumer_key' ],
+			'ConsumerSecret' => $assoc_args[ 'wc_consumer_secret' ],
+			'Platform' => 'WooCommerce',
+			'PlatformVersion' => WC_VERSION,
+			'PluginVersion' => STAMP_IC_WC_VERSION,
+			'WebSiteUrl' => 'https://stamp.local',
+//				'WebSiteUrl' => get_bloginfo( 'url' ),
+		) );
+
 
 	}
 }

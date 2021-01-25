@@ -18,14 +18,22 @@ class Stamp_IC_WC_Assets_Service_Provider extends AbstractServiceProvider {
 		$container = $this->getContainer();
 
 		$container->add('Stamp_IC_WC_Assets_Loader' )
-					->addMethodCall( 'set_container', array( $container ) )
-					->addMethodCall(
-						'set_admin_scripts',
-						array(
-							array(
-								new Stamp_IC_WC_Admin_Settings_Script(),
-							)
-						)
-					);
+			->addMethodCall( 'set_container', array( $container ) )
+			->addMethodCall(
+				'set_admin_scripts',
+				array(
+					array(
+						new Stamp_IC_WC_Admin_Settings_Script(),
+					)
+				)
+			)
+			->addMethodCall(
+				'set_admin_styles',
+				array(
+					array(
+						new Stamp_IC_WC_Admin_Settings_Style(),
+					)
+				)
+			);
 	}
 }

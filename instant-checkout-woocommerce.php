@@ -72,7 +72,7 @@ function run_stamp_ic_wc() {
 
 	$container->addServiceProvider( new Stamp_IC_WC_Settings_Service_Provider() );
 	$container->addServiceProvider( new Stamp_IC_WC_Admin_Service_Provider() );
-//	$container->addServiceProvider( new Stamp_IC_WC_Stamp_Service_Provider() );
+	$container->addServiceProvider( new Stamp_IC_WC_Stamp_Service_Provider() );
 	$container->addServiceProvider( new Stamp_IC_WC_Assets_Service_Provider() );
 
 	$plugin = new Stamp_IC_WooCommerce_Plugin();
@@ -82,11 +82,14 @@ function run_stamp_ic_wc() {
 				array(
 					$container->get( 'Stamp_IC_WC_Settings_Loader' ),
 					$container->get( 'Stamp_IC_WC_Admin_Loader' ),
-//					$container->get( 'Stamp_IC_WC_Stamp_Loader' ),
+					$container->get( 'Stamp_IC_WC_Stamp_Loader' ),
 					$container->get( 'Stamp_IC_WC_Assets_Loader' ),
 				)
-			)
-			->run();
+			);
+	$plugin->run();
+//	if( $plugin->can_run() ) {
+//		$plugin->run();
+//	}
 }
 
 add_action( 'plugins_loaded', 'run_stamp_ic_wc' );

@@ -9,9 +9,15 @@ class Stamp_IC_WC_Settings_Repository {
 
 	const STAMP_API_KEY = 'stamp_ic_wc_stamp_api_key';
 
+	const STAMP_API_URL = 'stamp_ic_wc_stamp_api_url';
+
+	const WC_CREDENTIALS_ID = 'stamp_ic_wc_credentials_id';
+
 	public function get_options(): array {
 		return array(
 			static::STAMP_API_KEY,
+			static::STAMP_API_URL,
+			static::WC_CREDENTIALS_ID,
 		);
 	}
 

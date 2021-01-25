@@ -43,6 +43,12 @@ class Stamp_IC_WC_Settings_Cli_Command extends Stamp_IC_WooCommerce_Abstract_Cli
 				'name' => 'stamp_api_key',
 				'optional' => true,
 			),
+			array(
+				'description' => 'Stamp API url',
+				'type' => 'assoc',
+				'name' => 'stamp_api_url',
+				'optional' => true,
+			),
 		);
 	}
 
@@ -59,6 +65,21 @@ class Stamp_IC_WC_Settings_Cli_Command extends Stamp_IC_WooCommerce_Abstract_Cli
 				sprintf(
 					'Stamp API key option set: %s',
 					$assoc_args[ 'stamp_api_key' ]
+				)
+			);
+		}
+
+		if( ! empty( $assoc_args[ 'stamp_api_url' ] ) ) {
+
+			$this->settings_repository->set(
+				Stamp_IC_WC_Settings_Repository::STAMP_API_URL,
+				$assoc_args[ 'stamp_api_url' ]
+			);
+
+			WP_CLI::success(
+				sprintf(
+					'Stamp API url option set: %s',
+					$assoc_args[ 'stamp_api_url' ]
 				)
 			);
 		}

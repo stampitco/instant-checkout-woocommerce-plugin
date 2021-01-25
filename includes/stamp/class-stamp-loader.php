@@ -10,6 +10,9 @@ class Stamp_IC_WC_Stamp_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	/* @var Stamp_IC_WC_Api_Client $api_client */
 	protected $api_client;
 
+	/* @var Stamp_IC_WC_Credentials $wc_credentials */
+	protected $wc_credentials;
+
 	/**
 	 * @return Stamp_IC_WC_Api_Client
 	 */
@@ -27,7 +30,27 @@ class Stamp_IC_WC_Stamp_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 		return $this;
 	}
 
+	/**
+	 * @return Stamp_IC_WC_Credentials
+	 */
+	public function get_wc_credentials(): Stamp_IC_WC_Credentials {
+		return $this->wc_credentials;
+	}
+
+	/**
+	 * @param Stamp_IC_WC_Credentials $wc_credentials
+	 *
+	 * @return Stamp_IC_WC_Stamp_Loader
+	 */
+	public function set_wc_credentials( Stamp_IC_WC_Credentials $wc_credentials ): Stamp_IC_WC_Stamp_Loader {
+		$this->wc_credentials = $wc_credentials;
+		return $this;
+	}
+
 	public function run() {
+
+		add_action( 'stamp_ic_wc_settings_saved', array( $this->wc_credentials, 'save_wc_credentials' ) );
+
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			$this->register_cli_commands();
 		}
