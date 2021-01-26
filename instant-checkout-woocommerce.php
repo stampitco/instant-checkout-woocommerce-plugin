@@ -86,10 +86,8 @@ function run_stamp_ic_wc() {
 					$container->get( 'Stamp_IC_WC_Assets_Loader' ),
 				)
 			);
+
 	$plugin->run();
-//	if( $plugin->can_run() ) {
-//		$plugin->run();
-//	}
 }
 
 add_action( 'plugins_loaded', 'run_stamp_ic_wc' );

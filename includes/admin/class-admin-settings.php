@@ -61,7 +61,7 @@ class Stamp_IC_WC_Admin_Settings {
 		}
 
 		if( is_null( $related_wc_credentials_key_id ) ) {
-			$this->settings_repository->set( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID, $related_wc_credentials_key_id, true );
+			$this->settings_repository->delete( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID );
 		}
 
 		$settings = array(

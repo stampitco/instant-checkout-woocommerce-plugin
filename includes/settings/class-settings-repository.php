@@ -37,6 +37,10 @@ class Stamp_IC_WC_Settings_Repository {
 		return update_option( $option, $value );
 	}
 
+	public function delete( $option ) {
+		return $this->set( $option, null, true );
+	}
+
 	public function check_option( $option, $quiet = false ): bool {
 
 		if( ! in_array( $option, $this->get_options() ) ) {
