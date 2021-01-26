@@ -87,10 +87,19 @@ class Stamp_IC_WC_Api_Cli_Command extends Stamp_IC_WooCommerce_Abstract_Cli_Comm
 			'Platform' => 'WooCommerce',
 			'PlatformVersion' => WC_VERSION,
 			'PluginVersion' => STAMP_IC_WC_VERSION,
-			'WebSiteUrl' => 'https://stamp.local',
-//				'WebSiteUrl' => get_bloginfo( 'url' ),
+			'WebSiteUrl' => get_bloginfo( 'url' ),
 		) );
 
+		if( is_array( $result ) && ! empty( $result[ 'error' ] ) ) {
+			WP_CLI::error(
+				sprintf(
+					'Failed to save the settings. Error: %s. Code: %s',
+					$result[ 'message' ],
+					$result[ 'code' ]
+				)
+			);
+		}
 
+		WP_CLI::success( 'The settings were saved' );
 	}
 }

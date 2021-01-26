@@ -28,16 +28,25 @@ class Stamp_IC_WC_Api_Client {
 		try {
 
 			$response = $this->http_client->post(
-				'/api/instant-checkout/settings',
+				'/api/instant-checkout/installations',
 				array(
 					'json' => $params
 				)
 			);
 
-			$body = json_decode( (string) $response->getBody(), true );
+//			$body = json_decode( (string) $response->getBody(), true );
 
-		} catch (\Exception $exception) {
-			error_log( $exception->getMessage() );
+			$result = true;
+
+		} catch ( Exception $exception ) {
+
+			$result = array(
+				'error' => true,
+				'message' => $exception->getMessage(),
+				'code' => $exception->getCode(),
+			);
+
+			error_log( $result[ 'message' ] );
 		}
 
 		return $result;

@@ -61,14 +61,14 @@ class Stamp_IC_WC_Credentials extends WC_Auth {
 				$this->settings_repository->set( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID, $consumer_data[ 'key_id' ] );
 			}
 
-//			$result = $this->api_client->save_wc_credentials( array(
-//				'ConsumerKey' => $consumer_data[ 'consumer_key' ],
-//				'ConsumerSecret' => $consumer_data[ 'consumer_secret' ],
-//				'Platform' => 'WooCommerce',
-//				'PlatformVersion' => WC_VERSION,
-//				'PluginVersion' => STAMP_IC_WC_VERSION,
-//				'WebSiteUrl' => get_bloginfo( 'url' ),
-//			) );
+			$this->api_client->save_wc_credentials( array(
+				'ConsumerKey' => $consumer_data[ 'consumer_key' ],
+				'ConsumerSecret' => $consumer_data[ 'consumer_secret' ],
+				'Platform' => 'WooCommerce',
+				'PlatformVersion' => WC_VERSION,
+				'PluginVersion' => STAMP_IC_WC_VERSION,
+				'WebSiteUrl' => get_bloginfo( 'url' ),
+			) );
 		}
 	}
 }
