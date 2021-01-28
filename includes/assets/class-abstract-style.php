@@ -11,6 +11,8 @@ abstract class Stamp_IC_WC_Abstract_Style {
 
     abstract public function url(): string;
 
+	abstract public function should_enqueue(): bool;
+
     public function version(): string {
         return STAMP_IC_WC_VERSION;
     }
@@ -21,9 +23,5 @@ abstract class Stamp_IC_WC_Abstract_Style {
 
     public function deps(): array {
         return array();
-    }
-
-    public function screens(): array {
-	    return array();
     }
 }

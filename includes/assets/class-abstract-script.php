@@ -13,16 +13,14 @@ abstract class Stamp_IC_WC_Abstract_Script {
 
     abstract public function deps(): array;
 
+	abstract public function should_enqueue(): bool;
+
     public function in_footer(): bool {
         return true;
     }
 
     public function version(): string {
         return STAMP_IC_WC_VERSION;
-    }
-
-    public function screens(): array {
-	    return array();
     }
 
     public function data( array $params = array() ): array {

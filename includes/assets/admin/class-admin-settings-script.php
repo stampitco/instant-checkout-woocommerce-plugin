@@ -23,9 +23,10 @@ class Stamp_IC_WC_Admin_Settings_Script extends Stamp_IC_WC_Abstract_Script {
 		);
 	}
 
-	public function screens(): array {
-		return array(
+	public function should_enqueue(): bool {
+		$screen = get_current_screen();
+		return $screen instanceof WP_Screen && in_array( $screen->id, array(
 			'settings_page_stamp-ic-wc',
-		);
+		) );
 	}
 }
