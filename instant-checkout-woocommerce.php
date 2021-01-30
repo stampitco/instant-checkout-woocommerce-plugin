@@ -74,6 +74,7 @@ function run_stamp_ic_wc() {
 	$container->addServiceProvider( new Stamp_IC_WC_Admin_Service_Provider() );
 	$container->addServiceProvider( new Stamp_IC_WC_Stamp_Service_Provider() );
 	$container->addServiceProvider( new Stamp_IC_WC_Assets_Service_Provider() );
+	$container->addServiceProvider( new Stamp_IC_WC_Checkout_Service_Provider() );
 
 	$plugin = new Stamp_IC_WooCommerce_Plugin();
 
@@ -84,6 +85,7 @@ function run_stamp_ic_wc() {
 					$container->get( 'Stamp_IC_WC_Admin_Loader' ),
 					$container->get( 'Stamp_IC_WC_Stamp_Loader' ),
 					$container->get( 'Stamp_IC_WC_Assets_Loader' ),
+					$container->get( 'Stamp_IC_WC_Checkout_Loader' ),
 				)
 			);
 

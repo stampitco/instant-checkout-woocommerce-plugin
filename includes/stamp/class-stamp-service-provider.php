@@ -15,6 +15,7 @@ class Stamp_IC_WC_Stamp_Service_Provider extends AbstractServiceProvider {
 		'Stamp_IC_WC_Stamp_Loader',
 		'Stamp_IC_WC_Api_Cli_Command',
 		'Stamp_IC_WC_Credentials',
+		'Stamp_IC_WC_Webhooks',
 	);
 
 	public function register() {
@@ -32,10 +33,13 @@ class Stamp_IC_WC_Stamp_Service_Provider extends AbstractServiceProvider {
 		) );
 
 		$container->add('Stamp_IC_WC_Api_Client' )->addArgument( $http_client );
-
+		
 		$container->add('Stamp_IC_WC_Credentials' )
 		          ->addMethodCall( 'set_api_client', array( 'Stamp_IC_WC_Api_Client' ) )
-		          ->addMethodCall( 'set_settings_repository', array( 'Stamp_IC_WC_Settings_Repository' ) );
+		          ->addMethodCall( 'set_settings_repository', array( $settings_repository ) );
+
+        $container->add('Stamp_IC_WC_Webhooks' )
+            ->addMethodCall( 'set_settings_repository', array( $settings_repository ) );
 
 		$container->add('Stamp_IC_WC_Stamp_Loader' )
 					->addMethodCall( 'set_container', array( $container ) )
