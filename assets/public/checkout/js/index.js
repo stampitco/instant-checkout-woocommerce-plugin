@@ -1,6 +1,7 @@
 import $ from 'jquery';
 
 import Checkout from './Checkout';
+import CheckoutWindow from './CheckoutWindow';
 import Api from './Api';
 
 $(function() {
@@ -9,15 +10,15 @@ $(function() {
 
     if( $checkoutButton.length > 0 && window.stampIcCheckout ) {
 
-        const api = new Api( {
+        const api = new Api( window.stampIcCheckout );
+        const checkoutWindow = new CheckoutWindow( { checkoutWindow: null } );
 
-        } );
-
-        $checkoutButton.forEach( function initCheckout( $element ) {
+        $checkoutButton.each( function initCheckout() {
             new Checkout( {
-                $element,
-                settings: window.stampIcCheckout,
+                $element: $(this),
                 api,
+                checkoutWindow,
+                debug: parseInt( window.stampIcCheckout.debug ) !== 0,
             } );
         } );
     }
