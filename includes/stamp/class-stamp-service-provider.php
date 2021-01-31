@@ -22,7 +22,7 @@ class Stamp_IC_WC_Stamp_Service_Provider extends AbstractServiceProvider {
 
 		$container = $this->getContainer();
 
-		$settings_repository = $container->get('Stamp_IC_WC_Settings_Repository' );
+		$settings_repository = $container->get( 'Stamp_IC_WC_Settings_Repository' );
 
 		$http_client = new Client( array(
 			'base_uri' => $settings_repository->get( Stamp_IC_WC_Settings_Repository::STAMP_API_URL ),

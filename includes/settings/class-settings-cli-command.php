@@ -49,6 +49,12 @@ class Stamp_IC_WC_Settings_Cli_Command extends Stamp_IC_WooCommerce_Abstract_Cli
 				'name' => 'stamp_api_url',
 				'optional' => true,
 			),
+            array(
+                'description' => 'WooCommerce Credentials ID',
+                'type' => 'assoc',
+                'name' => 'wc_credentials_id',
+                'optional' => true,
+            ),
 		);
 	}
 
@@ -83,5 +89,43 @@ class Stamp_IC_WC_Settings_Cli_Command extends Stamp_IC_WooCommerce_Abstract_Cli
 				)
 			);
 		}
+
+        if( ! empty( $assoc_args[ 'wc_credentials_id' ] ) ) {
+
+            $this->settings_repository->set(
+                Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID,
+                $assoc_args[ 'wc_credentials_id' ]
+            );
+
+            WP_CLI::success(
+                sprintf(
+                    'WooCommerce Credentials ID option set: %s',
+                    $assoc_args[ 'wc_credentials_id' ]
+                )
+            );
+        }
+
+        if( ! empty( $assoc_args[ 'wc_webhooks_id' ] ) ) {
+
+            $list = explode( ',', $assoc_args[ 'wc_webhooks_id' ] );
+
+            if( ! is_array( $list ) ) {
+                WP_CLI::error(
+                    'WooCommerce Webhooks ID option must be a comma separated list of values'
+                );
+            }
+
+            $this->settings_repository->set(
+                Stamp_IC_WC_Settings_Repository::WC_WEBHOOKS_ID,
+                $list
+            );
+
+            WP_CLI::success(
+                sprintf(
+                    'WooCommerce Webhooks ID option set: %s',
+                    $assoc_args[ 'wc_webhooks_id' ]
+                )
+            );
+        }
 	}
 }

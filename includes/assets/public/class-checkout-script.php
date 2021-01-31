@@ -30,6 +30,9 @@ class Stamp_IC_WC_Checkout_Script extends Stamp_IC_WC_Abstract_Script {
 	public function data( array $params = array() ): array {
 		return array(
 			'nonce' => wp_create_nonce( 'stamp-ic-checkout' ),
-		);
+			'nonceName' => 'stamp-ic-checkout',
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'getCheckoutUrlAction' => 'stamp_ic_checkout_get_checkout_url',
+        );
 	}
 }
