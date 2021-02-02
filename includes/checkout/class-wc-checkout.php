@@ -38,7 +38,7 @@ class Stamp_IC_WC_Checkout {
         wp_send_json_success( $result[ 'payload' ] );
     }
 
-    public function get_checkout_url( array $input ) {
+    public function get_checkout_url( array $input ): array {
 
         if( empty( $input[ 'stamp-ic-checkout' ] ) ) {
             return array(
@@ -69,13 +69,13 @@ class Stamp_IC_WC_Checkout {
             );
         }
 
-        $api_url = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::STAMP_API_URL );
+        $web_url = STAMP_WEB_URL;
 
-        if( empty( $api_url ) || ! filter_var( $api_url, FILTER_VALIDATE_URL ) ) {
+        if( empty( $web_url ) || ! filter_var( $web_url, FILTER_VALIDATE_URL ) ) {
             return array(
                 'error' => true,
                 'payload' => array(
-                    'message' => __( 'Stamp Api URL missing or invalid', STAMP_IC_WC_TEXT_DOMAIN )
+                    'message' => __( 'Stamp Web URL missing or invalid', STAMP_IC_WC_TEXT_DOMAIN )
                 )
             );
         }
@@ -120,20 +120,18 @@ class Stamp_IC_WC_Checkout {
             );
         }
 
-        $instant_checkout_url = untrailingslashit(
-            $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::STAMP_API_URL )
-        );
+        $instant_checkout_url = untrailingslashit( $web_url );
 
         $query_args = array(
             'productId' => $product_id,
-            'productSku' => $product->get_sku(),
+            'sku' => $product->get_sku(),
             'quantity' => $qty,
             'appKey' => $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::STAMP_API_KEY ),
         );
 
         if( $variation instanceof WC_Product_Variation ) {
-            $query_args[ 'variationId' ] = $variation_id;
-            $query_args[ 'variationSku' ] = $variation->get_sku();
+            $query_args[ 'productId' ] = $variation_id;
+            $query_args[ 'sku' ] = $variation->get_sku();
         }
 
         return array(

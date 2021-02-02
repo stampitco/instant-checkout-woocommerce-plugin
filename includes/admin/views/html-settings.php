@@ -20,25 +20,6 @@
                     <tr class="form-field">
                         <th scope="row">
                             <label for="stamp_api_key">
-                                <?php _e( 'API url', STAMP_IC_WC_TEXT_DOMAIN ); ?>
-                            </label>
-                        </th>
-                        <td>
-                            <input id="stamp_api_url"
-                                   name="stamp_api_url"
-                                   type="url"
-                                   data-parsley-type="url"
-                                   required
-                                   value="<?php echo esc_attr( $stamp_api_url ); ?>"
-                            >
-                            <p>
-                                <?php _e( 'The Stamp API url', STAMP_IC_WC_TEXT_DOMAIN ); ?>
-                            </p>
-                        </td>
-                    </tr>
-                    <tr class="form-field">
-                        <th scope="row">
-                            <label for="stamp_api_key">
                                 <?php _e( 'API Key', STAMP_IC_WC_TEXT_DOMAIN ); ?>
                             </label>
                         </th>
@@ -62,14 +43,14 @@
                     <tr class="form-field">
                         <th colspan="2" style="padding-bottom: 0;padding-top: 0;">
                             <h2>
-			                    <?php _e( 'Related WooCommerce Credentials:', STAMP_IC_WC_TEXT_DOMAIN ) ?>
+			                    <?php _e( 'Related WooCommerce Settings:', STAMP_IC_WC_TEXT_DOMAIN ) ?>
                             </h2>
                         </th>
                     </tr>
                     <tr class="form-field">
                         <th scope="row">
-                            <label for="stamp_api_key">
-			                    <?php _e( 'API Key', STAMP_IC_WC_TEXT_DOMAIN ); ?>
+                            <label for="stamp_related_wc_credentials_key_id">
+			                    <?php _e( 'REST API Credentials', STAMP_IC_WC_TEXT_DOMAIN ); ?>
                             </label>
                         </th>
                         <td>
@@ -81,15 +62,70 @@
 
                                     <?php $url = admin_url( 'admin.php?page=wc-settings&tab=advanced&section=keys&edit-key=' . $wc_credentials_key_id ); ?>
 
-	                                <a href="<?php echo esc_url( $url ); ?>">
+	                                <a href="<?php echo esc_url( $url ); ?>" target="_blank">
 		                                <?php _e( 'Details', STAMP_IC_WC_TEXT_DOMAIN ); ?>
                                     </a>
 
                                     <input id="stamp_related_wc_credentials_key_id"
                                            name="stamp_related_wc_credentials_key_id"
                                            type="hidden"
-                                           required
                                            value="<?php echo esc_attr( $wc_credentials_key_id ); ?>"
+                                    >
+                                <?php endif; ?>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr class="form-field">
+                        <th scope="row">
+                            <label for="stamp_related_webhook_order_updated_id">
+                                <?php _e( 'Order Update Webhook', STAMP_IC_WC_TEXT_DOMAIN ); ?>
+                            </label>
+                        </th>
+                        <td>
+                            <p>
+                                <?php if( is_null( $webhook_order_updated ) ): ?>
+                                    <?php _e( 'There is no related order update webhook. One will be created automatically when you save the settings.', STAMP_IC_WC_TEXT_DOMAIN ); ?>
+                                <?php endif; ?>
+                                <?php if( ! is_null( $webhook_order_updated ) ): ?>
+
+                                    <?php $url = admin_url( 'admin.php?page=wc-settings&tab=advanced&section=webhooks&edit-webhook=' . $webhook_order_updated->get_id() ); ?>
+
+                                    <a href="<?php echo esc_url( $url ); ?>" target="_blank">
+                                        <?php _e( 'Details', STAMP_IC_WC_TEXT_DOMAIN ); ?>
+                                    </a>
+
+                                    <input id="stamp_related_webhook_order_updated_id"
+                                           name="stamp_related_webhook_order_updated_id"
+                                           type="hidden"
+                                           value="<?php echo esc_attr( $webhook_order_updated->get_id() ); ?>"
+                                    >
+                                <?php endif; ?>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr class="form-field">
+                        <th scope="row">
+                            <label for="stamp_related_webhook_order_deleted_id">
+                                <?php _e( 'Order Delete Webhook', STAMP_IC_WC_TEXT_DOMAIN ); ?>
+                            </label>
+                        </th>
+                        <td>
+                            <p>
+                                <?php if( is_null( $webhook_order_deleted ) ): ?>
+                                    <?php _e( 'There is no related order delete webhook. One will be created automatically when you save the settings.', STAMP_IC_WC_TEXT_DOMAIN ); ?>
+                                <?php endif; ?>
+                                <?php if( ! is_null( $webhook_order_deleted ) ): ?>
+
+                                    <?php $url = admin_url( 'admin.php?page=wc-settings&tab=advanced&section=webhooks&edit-webhook=' . $webhook_order_deleted->get_id() ); ?>
+
+                                    <a href="<?php echo esc_url( $url ); ?>" target="_blank">
+                                        <?php _e( 'Details', STAMP_IC_WC_TEXT_DOMAIN ); ?>
+                                    </a>
+
+                                    <input id="stamp_related_webhook_order_deleted_id"
+                                           name="stamp_related_webhook_order_deleted_id"
+                                           type="hidden"
+                                           value="<?php echo esc_attr( $webhook_order_deleted->get_id() ); ?>"
                                     >
                                 <?php endif; ?>
                             </p>

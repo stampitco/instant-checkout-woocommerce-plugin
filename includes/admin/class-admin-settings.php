@@ -48,13 +48,10 @@ class Stamp_IC_WC_Admin_Settings {
 			wp_die( __( 'Cheatin&#8217; huh?', STAMP_IC_WC_TEXT_DOMAIN ) );
 		}
 
-		$stamp_api_url = ! empty( $_POST[ 'stamp_api_url' ] ) ? wc_clean( $_POST[ 'stamp_api_url' ] ) : null;
 		$stamp_api_key = ! empty( $_POST[ 'stamp_api_key' ] ) ? wc_clean( $_POST[ 'stamp_api_key' ] ) : null;
 		$related_wc_credentials_key_id = ! empty( $_POST[ 'stamp_related_wc_credentials_key_id' ] ) ? wc_clean( $_POST[ 'stamp_related_wc_credentials_key_id' ] ) : null;
-
-		if( ! is_null( $stamp_api_url ) ) {
-			$this->settings_repository->set( Stamp_IC_WC_Settings_Repository::STAMP_API_URL, $stamp_api_url );
-		}
+        $related_webhook_order_updated_id = ! empty( $_POST[ 'stamp_related_webhook_order_updated_id' ] ) ? wc_clean( $_POST[ 'stamp_related_webhook_order_updated_id' ] ) : null;
+        $related_webhook_order_deleted_id = ! empty( $_POST[ 'stamp_related_webhook_order_deleted_id' ] ) ? wc_clean( $_POST[ 'stamp_related_webhook_order_deleted_id' ] ) : null;
 
 		if( ! is_null( $stamp_api_key ) ) {
 			$this->settings_repository->set( Stamp_IC_WC_Settings_Repository::STAMP_API_KEY, $stamp_api_key );
@@ -64,10 +61,19 @@ class Stamp_IC_WC_Admin_Settings {
 			$this->settings_repository->delete( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID );
 		}
 
+        if( is_null( $related_webhook_order_updated_id ) ) {
+            $this->settings_repository->delete( Stamp_IC_WC_Settings_Repository::WC_WEBHOOK_ORDER_UPDATED_ID );
+        }
+
+        if( is_null( $related_webhook_order_deleted_id ) ) {
+            $this->settings_repository->delete( Stamp_IC_WC_Settings_Repository::WC_WEBHOOK_ORDER_DELETED_ID );
+        }
+
 		$settings = array(
-			'stamp_api_url' => $stamp_api_url,
 			'stamp_api_key' => $stamp_api_key,
 			'related_wc_credentials_key_id' => $related_wc_credentials_key_id,
+			'related_webhook_order_updated_id' => $related_webhook_order_updated_id,
+			'related_webhook_order_deleted_id' => $related_webhook_order_deleted_id,
 			'user_id' => get_current_user_id(),
 		);
 
@@ -86,14 +92,36 @@ class Stamp_IC_WC_Admin_Settings {
 	public function render() {
 
 		$stamp_api_key = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::STAMP_API_KEY );
-		$stamp_api_url = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::STAMP_API_URL );
 
 		$wc_credentials_key_id = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID );
 
 		if( ! empty( $wc_credentials_key_id ) ) {
 			global $wpdb;
 			$wc_credentials_key_id = $wpdb->get_var( $wpdb->prepare( "SELECT key_id FROM {$wpdb->prefix}woocommerce_api_keys WHERE key_id = %d", $wc_credentials_key_id ) );
+			if( empty( $wc_credentials_key_id ) ) {
+                $wc_credentials_key_id = null;
+            }
 		}
+
+        $webhook_order_updated = null;
+
+        try {
+            $webhook_order_updated = wc_get_webhook(
+                $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_WEBHOOK_ORDER_UPDATED_ID )
+            );
+        } catch (Exception $exception) {
+
+        }
+
+        $webhook_order_deleted = null;
+
+		try {
+            $webhook_order_deleted = wc_get_webhook(
+                $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_WEBHOOK_ORDER_DELETED_ID )
+            );
+        } catch (Exception $exception) {
+
+        }
 
 		include __DIR__ . '/views/html-settings.php';
 	}

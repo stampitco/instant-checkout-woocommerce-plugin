@@ -9,18 +9,18 @@ class Stamp_IC_WC_Settings_Repository {
 
 	const STAMP_API_KEY = 'stamp_ic_wc_stamp_api_key';
 
-	const STAMP_API_URL = 'stamp_ic_wc_stamp_api_url';
-
 	const WC_CREDENTIALS_ID = 'stamp_ic_wc_credentials_id';
 
-	const WC_WEBHOOKS_ID = 'stamp_ic_wc_webhooks_id';
+	const WC_WEBHOOK_ORDER_UPDATED_ID = 'stamp_ic_wc_webhook_order_updated_id';
+
+	const WC_WEBHOOK_ORDER_DELETED_ID = 'stamp_ic_wc_webhook_order_deleted_id';
 
 	public function get_options(): array {
 		return array(
 			static::STAMP_API_KEY,
-			static::STAMP_API_URL,
 			static::WC_CREDENTIALS_ID,
-			static::WC_WEBHOOKS_ID,
+			static::WC_WEBHOOK_ORDER_UPDATED_ID,
+			static::WC_WEBHOOK_ORDER_DELETED_ID,
 		);
 	}
 

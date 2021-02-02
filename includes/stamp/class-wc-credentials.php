@@ -51,24 +51,28 @@ class Stamp_IC_WC_Credentials extends WC_Auth {
 
 	public function save_wc_credentials( array $params ) {
 
-		$key_id = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID );
+	    if( ! empty( $params[ 'user_id' ] ) && array_key_exists( 'related_wc_credentials_key_id', $params ) ) {
 
-		if( empty( $key_id ) ) {
+            $key_id = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID );
 
-			$consumer_data = $this->create_keys( 'Stamp', $params[ 'user_id' ], 'read_write' );
+            if( empty( $key_id ) || (int) $key_id !== (int) $params[ 'related_wc_credentials_key_id' ] ) {
 
-			if( ! empty( $consumer_data[ 'key_id' ] ) ) {
-				$this->settings_repository->set( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID, $consumer_data[ 'key_id' ] );
-			}
+                $consumer_data = $this->create_keys( 'Stamp', $params[ 'user_id' ], 'read_write' );
 
-			$this->api_client->save_wc_credentials( array(
-				'ConsumerKey' => $consumer_data[ 'consumer_key' ],
-				'ConsumerSecret' => $consumer_data[ 'consumer_secret' ],
-				'Platform' => 'WooCommerce',
-				'PlatformVersion' => WC_VERSION,
-				'PluginVersion' => STAMP_IC_WC_VERSION,
-				'WebSiteUrl' => get_bloginfo( 'url' ),
-			) );
-		}
+                if( ! empty( $consumer_data[ 'key_id' ] ) ) {
+                    $this->settings_repository->set( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID, $consumer_data[ 'key_id' ] );
+                }
+
+                $this->api_client->save_wc_credentials( array(
+                    'ConsumerKey' => $consumer_data[ 'consumer_key' ],
+                    'ConsumerSecret' => $consumer_data[ 'consumer_secret' ],
+                    'Platform' => 'WooCommerce',
+                    'PlatformVersion' => WC_VERSION,
+                    'PluginVersion' => STAMP_IC_WC_VERSION,
+                    'WebSiteUrl' => get_bloginfo( 'url' ),
+                    'StoreName' => get_bloginfo( 'name' ),
+                ) );
+            }
+        }
 	}
 }

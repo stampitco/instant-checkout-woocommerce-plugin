@@ -44,6 +44,14 @@ if ( ! defined( 'STAMP_IC_WC_VERSION' ) ) {
 	define( 'STAMP_IC_WC_VERSION', '1.0.0' );
 }
 
+if ( ! defined( 'STAMP_API_URL' ) ) {
+    define( 'STAMP_API_URL', 'https://stamp-api-instantcheckout-int.azurewebsites.net' );
+}
+
+if ( ! defined( 'STAMP_WEB_URL' ) ) {
+    define( 'STAMP_WEB_URL', 'https://stamp-web-instantcheckout-int.azurewebsites.net' );
+}
+
 function activate_stamp_ic_wc() {
 	$activator = new Stamp_IC_WC_Activator();
 	$activator->activate( apply_filters( 'active_plugins', get_option('active_plugins' ) ) );
@@ -63,7 +71,7 @@ function run_stamp_ic_wc() {
 
 	$missing_plugins = $activator->check_for_required_plugins( apply_filters( 'active_plugins', get_option('active_plugins' ) ) );
 
-	if( !empty( $missing_plugins ) ) {
+	if( ! empty( $missing_plugins ) ) {
 		array_map( array( $activator, 'report_missing_plugin' ), $missing_plugins );
 		return;
 	}

@@ -13,6 +13,9 @@ class Stamp_IC_WC_Stamp_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	/* @var Stamp_IC_WC_Credentials $wc_credentials */
 	protected $wc_credentials;
 
+    /* @var Stamp_IC_WC_Webhooks $wc_webhooks */
+    protected $wc_webhooks;
+
 	/**
 	 * @return Stamp_IC_WC_Api_Client
 	 */
@@ -47,9 +50,28 @@ class Stamp_IC_WC_Stamp_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 		return $this;
 	}
 
+    /**
+     * @return Stamp_IC_WC_Webhooks
+     */
+    public function get_wc_webhooks(): Stamp_IC_WC_Webhooks {
+        return $this->wc_webhooks;
+    }
+
+    /**
+     * @param Stamp_IC_WC_Webhooks $wc_webhooks
+     * @return Stamp_IC_WC_Stamp_Loader
+     */
+    public function set_wc_webhooks( Stamp_IC_WC_Webhooks $wc_webhooks ): Stamp_IC_WC_Stamp_Loader {
+        $this->wc_webhooks = $wc_webhooks;
+        return $this;
+    }
+
 	public function run() {
 
 		add_action( 'stamp_ic_wc_settings_saved', array( $this->wc_credentials, 'save_wc_credentials' ) );
+		add_action( 'stamp_ic_wc_settings_saved', array( $this->wc_webhooks, 'save_wc_webhooks' ) );
+
+		add_filter( 'woocommerce_webhook_http_args', array( $this->wc_webhooks, 'process_webhook_http_params' ), 10, 3 );
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			$this->register_cli_commands();

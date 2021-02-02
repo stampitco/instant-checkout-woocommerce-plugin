@@ -25,7 +25,7 @@ class Stamp_IC_WC_Stamp_Service_Provider extends AbstractServiceProvider {
 		$settings_repository = $container->get( 'Stamp_IC_WC_Settings_Repository' );
 
 		$http_client = new Client( array(
-			'base_uri' => $settings_repository->get( Stamp_IC_WC_Settings_Repository::STAMP_API_URL ),
+			'base_uri' => STAMP_API_URL,
 			'verify' => false,
 			'headers' => array(
 				'X-IC-AppKey' => $settings_repository->get( Stamp_IC_WC_Settings_Repository::STAMP_API_KEY ),
@@ -44,7 +44,8 @@ class Stamp_IC_WC_Stamp_Service_Provider extends AbstractServiceProvider {
 		$container->add('Stamp_IC_WC_Stamp_Loader' )
 					->addMethodCall( 'set_container', array( $container ) )
 		            ->addMethodCall( 'set_api_client', array( 'Stamp_IC_WC_Api_Client' ) )
-		            ->addMethodCall( 'set_wc_credentials', array( 'Stamp_IC_WC_Credentials' ) );
+		            ->addMethodCall( 'set_wc_credentials', array( 'Stamp_IC_WC_Credentials' ) )
+		            ->addMethodCall( 'set_wc_webhooks', array( 'Stamp_IC_WC_Webhooks' ) );
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			$container->add('Stamp_IC_WC_Api_Cli_Command' )

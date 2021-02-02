@@ -20,5 +20,6 @@ $container->addServiceProvider( new Stamp_IC_WC_Settings_Service_Provider() );
 $settings_repository = $container->get( 'Stamp_IC_WC_Settings_Repository' );
 
 $settings_repository->delete( Stamp_IC_WC_Settings_Repository::STAMP_API_KEY );
-$settings_repository->delete( Stamp_IC_WC_Settings_Repository::STAMP_API_URL );
 $settings_repository->delete( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID );
+$settings_repository->delete( Stamp_IC_WC_Settings_Repository::WC_WEBHOOK_ORDER_UPDATED_ID );
+$settings_repository->delete( Stamp_IC_WC_Settings_Repository::WC_WEBHOOK_ORDER_DELETED_ID );
