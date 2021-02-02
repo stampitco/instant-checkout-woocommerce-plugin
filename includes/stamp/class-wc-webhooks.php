@@ -90,7 +90,7 @@ class Stamp_IC_WC_Webhooks {
 
         $webhook = new WC_Webhook( 0 );
 
-        $webhook->set_name( $topic === 'order.updated' ? 'Stamp API Order Update' : 'Stamp API Order Delete' );
+        $webhook->set_name( $topic === 'order.updated' ? 'Instant Checkout - Order Update' : 'Instant Checkout - Order Delete' );
         $webhook->set_user_id( $user_id );
         $webhook->set_status( 'active' );
         $webhook->set_delivery_url( esc_url_raw( wp_unslash( $delivery_url ) ) );

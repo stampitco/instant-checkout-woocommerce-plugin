@@ -57,7 +57,7 @@ class Stamp_IC_WC_Credentials extends WC_Auth {
 
             if( empty( $key_id ) || (int) $key_id !== (int) $params[ 'related_wc_credentials_key_id' ] ) {
 
-                $consumer_data = $this->create_keys( 'Stamp', $params[ 'user_id' ], 'read_write' );
+                $consumer_data = $this->create_keys( 'Instant Checkout', $params[ 'user_id' ], 'read_write' );
 
                 if( ! empty( $consumer_data[ 'key_id' ] ) ) {
                     $this->settings_repository->set( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID, $consumer_data[ 'key_id' ] );
