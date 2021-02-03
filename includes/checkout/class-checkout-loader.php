@@ -24,6 +24,7 @@ class Stamp_IC_WC_Checkout_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 
     public function run() {
         add_action( 'stamp_ic_checkout_do_checkout_button', array( $this->wc_checkout, 'show_checkout_button' ) );
+        add_action( 'wp_ajax_stamp_ic_checkout_get_checkout_url', array( $this->wc_checkout, 'get_checkout_url_ajax_handler' ) );
         add_action( 'wp_ajax_nopriv_stamp_ic_checkout_get_checkout_url', array( $this->wc_checkout, 'get_checkout_url_ajax_handler' ) );
     }
 }
