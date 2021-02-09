@@ -10,6 +10,12 @@ class Stamp_IC_WC_Admin_Settings {
 	/* @var Stamp_IC_WC_Settings_Repository $settings_repository */
 	protected $settings_repository;
 
+	/* @var Stamp_IC_WC_Settings_Notifications_Repository $notifications_repository */
+	protected $notifications_repository;
+
+	/* @var Stamp_IC_WC_Api_Client $api_client */
+	protected $api_client;
+
 	/**
 	 * @return Stamp_IC_WC_Settings_Repository
 	 */
@@ -27,6 +33,40 @@ class Stamp_IC_WC_Admin_Settings {
 		return $this;
 	}
 
+	/**
+	 * @return Stamp_IC_WC_Settings_Notifications_Repository
+	 */
+	public function get_notifications_repository(): Stamp_IC_WC_Settings_Notifications_Repository {
+		return $this->notifications_repository;
+	}
+
+	/**
+	 * @param Stamp_IC_WC_Settings_Notifications_Repository $notifications_repository
+	 *
+	 * @return Stamp_IC_WC_Admin_Settings
+	 */
+	public function set_notifications_repository( Stamp_IC_WC_Settings_Notifications_Repository $notifications_repository ): Stamp_IC_WC_Admin_Settings {
+		$this->notifications_repository = $notifications_repository;
+		return $this;
+	}
+
+	/**
+	 * @return Stamp_IC_WC_Api_Client
+	 */
+	public function get_api_client(): Stamp_IC_WC_Api_Client {
+		return $this->api_client;
+	}
+
+	/**
+	 * @param Stamp_IC_WC_Api_Client $api_client
+	 *
+	 * @return Stamp_IC_WC_Admin_Settings
+	 */
+	public function set_api_client( Stamp_IC_WC_Api_Client $api_client ): Stamp_IC_WC_Admin_Settings {
+		$this->api_client = $api_client;
+		return $this;
+	}
+
 	public function register_admin_menu_items() {
 		add_submenu_page(
 			'options-general.php',
@@ -40,7 +80,7 @@ class Stamp_IC_WC_Admin_Settings {
 
 	public function save_settings() {
 
-		if( empty( $_POST[ 'stamp_ic_wc_settings_nonce' ] ) ) {
+		if( empty( $_POST[ 'stamp_ic_wc_settings_nonce' ] ) || empty( $_POST[ 'save_stamp_ic_wc_settings' ] ) ) {
 			return;
 		}
 
@@ -79,14 +119,44 @@ class Stamp_IC_WC_Admin_Settings {
 
 		do_action( 'stamp_ic_wc_settings_saved', $settings );
 
-		wp_redirect(
-			add_query_arg(
-				array(
-					'page' => 'stamp-ic-wc',
-				),
-				admin_url( 'options-general.php' )
-			)
+		$this->get_notifications_repository()->add(
+			Stamp_IC_WC_Settings_Notifications_Repository::SETTINGS,
+			Stamp_IC_WC_Settings_Notification::SUCCESS,
+			__( 'Plugin settings were saved successfully', STAMP_IC_WC_TEXT_DOMAIN )
 		);
+	}
+
+	public function test_stamp_api_credentials() {
+
+		if( empty( $_POST[ 'stamp_ic_wc_settings_nonce' ] ) || empty( $_POST[ 'test_stamp_ic_wc_credentials' ] ) ) {
+			return;
+		}
+
+		if ( ! wp_verify_nonce( $_POST['stamp_ic_wc_settings_nonce'], 'stamp_ic_wc_settings_nonce' ) ) {
+			wp_die( __( 'Cheatin&#8217; huh?', STAMP_IC_WC_TEXT_DOMAIN ) );
+		}
+
+		$result = $this->get_api_client()->verify();
+
+		if( ! empty( $result[ 'error' ] ) ) {
+			$this->get_notifications_repository()->add(
+				Stamp_IC_WC_Settings_Notifications_Repository::SETTINGS,
+				Stamp_IC_WC_Settings_Notification::ERROR,
+				sprintf(
+					__( 'Failed to save WooCommerce credentials in the Stamp API. Error: %s. Code: %d', STAMP_IC_WC_TEXT_DOMAIN ),
+					$result[ 'message' ],
+					$result[ 'code' ]
+				)
+			);
+		}
+
+		if( empty( $result[ 'error' ] ) ) {
+			$this->get_notifications_repository()->add(
+				Stamp_IC_WC_Settings_Notifications_Repository::SETTINGS,
+				Stamp_IC_WC_Settings_Notification::SUCCESS,
+				__( 'WooCommerce credentials were successfully saved in the Stamp API.', STAMP_IC_WC_TEXT_DOMAIN )
+			);
+		}
 	}
 
 	public function render() {
@@ -122,6 +192,8 @@ class Stamp_IC_WC_Admin_Settings {
         } catch (Exception $exception) {
 
         }
+
+        $notifications = $this->get_notifications_repository()->get( Stamp_IC_WC_Settings_Notifications_Repository::SETTINGS );
 
 		include __DIR__ . '/views/html-settings.php';
 	}

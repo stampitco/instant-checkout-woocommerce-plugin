@@ -5,50 +5,119 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-use GuzzleHttp\Client;
-
 class Stamp_IC_WC_Api_Client {
 
-	/* @var Client $http_client */
-	protected $http_client;
+    protected $api_url;
+
+    protected $api_token;
+
+	public function get_api_url( $path = null, array $query = array() ): string {
+
+		if( ! is_null( $path ) ) {
+
+			$url = sprintf(
+				'%s/%s',
+				$this->api_url,
+				ltrim( $path, '/\\' )
+			);
+
+			if( ! empty( $query ) ) {
+				$url .= '?' . http_build_query( $query );
+			}
+
+			return $url;
+		}
+
+		return $this->api_url;
+	}
 
 	/**
-	 * Stamp_IC_WC_Api_Client constructor.
+	 * @param mixed $api_url
 	 *
-	 * @param Client $http_client
+	 * @return Stamp_IC_WC_Api_Client
 	 */
-	public function __construct( Client $http_client ) {
-		$this->http_client = $http_client;
+	public function set_api_url( $api_url ): Stamp_IC_WC_Api_Client {
+		$this->api_url = $api_url;
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function get_api_token() {
+		return $this->api_token;
+	}
+
+	/**
+	 * @param mixed $api_token
+	 *
+	 * @return Stamp_IC_WC_Api_Client
+	 */
+	public function set_api_token( $api_token ): Stamp_IC_WC_Api_Client {
+		$this->api_token = $api_token;
+		return $this;
 	}
 
 	public function save_wc_credentials( array $params ) {
 
-		$result = null;
+		$response = wp_remote_post(
+			$this->get_api_url( 'api/instant-checkout/installations' ),
+			array(
+				'body' => wp_json_encode( $params ),
+				'headers' => array(
+					'Content-Type' => 'application/json',
+					'X-IC-AppKey' => $this->get_api_token()
+				),
+				'data_format' => 'body',
+				'timeout' => 45
+			)
+		);
 
-		try {
+		$http_code = wp_remote_retrieve_response_code( $response );
 
-			$response = $this->http_client->post(
-				'/api/instant-checkout/installations',
-				array(
-					'json' => $params
-				)
-			);
+		if( $http_code > 200 ) {
 
-//			$body = json_decode( (string) $response->getBody(), true );
+			$message = wp_remote_retrieve_response_message( $response );
 
-			$result = true;
+			error_log( $message );
 
-		} catch ( Exception $exception ) {
-
-			$result = array(
+			return array(
 				'error' => true,
-				'message' => $exception->getMessage(),
-				'code' => $exception->getCode(),
+				'code' => $http_code,
+				'message' => $message,
 			);
-
-			error_log( $result[ 'message' ] );
 		}
 
-		return $result;
+		return wp_remote_retrieve_body( $response );
 	}
+
+	public function verify( array $params = array() ) {
+
+        $response = wp_remote_get(
+	        $this->get_api_url( 'api/instant-checkout/installations', $params ),
+	        array(
+	        	'headers' => array(
+			        'Content-Type' => 'application/json',
+			        'X-IC-AppKey' => $this->get_api_token()
+		        )
+	        )
+        );
+
+		$http_code = wp_remote_retrieve_response_code( $response );
+
+		if( $http_code > 200 ) {
+
+			$message = wp_remote_retrieve_response_message( $response );
+
+			error_log( $message );
+
+			return array(
+				'error' => true,
+				'code' => $http_code,
+				'message' => $message,
+			);
+		}
+
+		return wp_remote_retrieve_body( $response );
+    }
 }

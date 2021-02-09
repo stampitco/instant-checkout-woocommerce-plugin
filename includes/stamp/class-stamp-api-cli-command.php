@@ -44,6 +44,7 @@ class Stamp_IC_WC_Api_Cli_Command extends Stamp_IC_WooCommerce_Abstract_Cli_Comm
 				'optional' => false,
 				'options' => array(
 					'set_settings',
+					'verify',
 				),
 			),
 			array(
@@ -65,6 +66,9 @@ class Stamp_IC_WC_Api_Cli_Command extends Stamp_IC_WooCommerce_Abstract_Cli_Comm
 		if( $assoc_args[ 'action' ] === 'set_settings' ) {
 			$this->set_settings( $args, $assoc_args );
 		}
+		if( $assoc_args[ 'action' ] === 'verify' ) {
+			$this->verify( $args, $assoc_args );
+		}
 	}
 
 	protected function set_settings( $args, $assoc_args ) {
@@ -81,7 +85,7 @@ class Stamp_IC_WC_Api_Cli_Command extends Stamp_IC_WooCommerce_Abstract_Cli_Comm
 			);
 		}
 
-		$result = $this->api_client->save_wc_credentials( array(
+		$result = $this->get_api_client()->save_wc_credentials( array(
 			'ConsumerKey' => $assoc_args[ 'wc_consumer_key' ],
 			'ConsumerSecret' => $assoc_args[ 'wc_consumer_secret' ],
 			'Platform' => 'WooCommerce',
@@ -101,5 +105,24 @@ class Stamp_IC_WC_Api_Cli_Command extends Stamp_IC_WooCommerce_Abstract_Cli_Comm
 		}
 
 		WP_CLI::success( 'The settings were saved' );
+	}
+
+	protected function verify( $args, $assoc_args ) {
+
+		$result = $this->get_api_client()->verify();
+
+		if( ! empty( $result[ 'error' ] ) ) {
+			WP_CLI::error(
+				sprintf(
+					__( 'Failed to verify connection to Stamp API: Error: %s. Code: %s', STAMP_IC_WC_TEXT_DOMAIN ),
+					$result[ 'message' ],
+					$result[ 'code' ]
+				)
+			);
+		}
+
+		WP_CLI::success(
+			'Connection to Stamp API verified'
+		);
 	}
 }

@@ -13,7 +13,27 @@ class Stamp_IC_WC_Credentials extends WC_Auth {
 	/* @var Stamp_IC_WC_Settings_Repository $settings_repository */
 	protected $settings_repository;
 
+	/* @var Stamp_IC_WC_Settings_Notifications_Repository $notifications_repository */
+	protected $notifications_repository;
+
 	public function __construct() {}
+
+	/**
+	 * @return Stamp_IC_WC_Settings_Notifications_Repository
+	 */
+	public function get_notifications_repository(): Stamp_IC_WC_Settings_Notifications_Repository {
+		return $this->notifications_repository;
+	}
+
+	/**
+	 * @param Stamp_IC_WC_Settings_Notifications_Repository $notifications_repository
+	 *
+	 * @return Stamp_IC_WC_Credentials
+	 */
+	public function set_notifications_repository( Stamp_IC_WC_Settings_Notifications_Repository $notifications_repository ): Stamp_IC_WC_Credentials {
+		$this->notifications_repository = $notifications_repository;
+		return $this;
+	}
 
 	/**
 	 * @return Stamp_IC_WC_Api_Client
@@ -63,7 +83,7 @@ class Stamp_IC_WC_Credentials extends WC_Auth {
                     $this->settings_repository->set( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID, $consumer_data[ 'key_id' ] );
                 }
 
-                $this->api_client->save_wc_credentials( array(
+                $result = $this->api_client->save_wc_credentials( array(
                     'ConsumerKey' => $consumer_data[ 'consumer_key' ],
                     'ConsumerSecret' => $consumer_data[ 'consumer_secret' ],
                     'Platform' => 'WooCommerce',
@@ -72,6 +92,26 @@ class Stamp_IC_WC_Credentials extends WC_Auth {
                     'WebSiteUrl' => get_bloginfo( 'url' ),
                     'StoreName' => get_bloginfo( 'name' ),
                 ) );
+
+                if( ! empty( $result[ 'error' ] ) ) {
+                	$this->get_notifications_repository()->add(
+		                Stamp_IC_WC_Settings_Notifications_Repository::SETTINGS,
+		                Stamp_IC_WC_Settings_Notification::ERROR,
+		                sprintf(
+			                __( 'Failed to save WooCommerce credentials in the Stamp API. Error: %s. Code: %d', STAMP_IC_WC_TEXT_DOMAIN ),
+			                $result[ 'message' ],
+			                $result[ 'code' ]
+		                )
+	                );
+                }
+
+	            if( empty( $result[ 'error' ] ) ) {
+		            $this->get_notifications_repository()->add(
+			            Stamp_IC_WC_Settings_Notifications_Repository::SETTINGS,
+			            Stamp_IC_WC_Settings_Notification::SUCCESS,
+			            __( 'WooCommerce credentials were successfully saved in the Stamp API.', STAMP_IC_WC_TEXT_DOMAIN )
+		            );
+	            }
             }
         }
 	}

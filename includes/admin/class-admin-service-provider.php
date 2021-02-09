@@ -19,7 +19,9 @@ class Stamp_IC_WC_Admin_Service_Provider extends AbstractServiceProvider {
 		$container = $this->getContainer();
 
 		$container->add('Stamp_IC_WC_Admin_Settings' )
-		          ->addMethodCall( 'set_settings_repository', array( 'Stamp_IC_WC_Settings_Repository' ) );
+		            ->addMethodCall( 'set_settings_repository', array( 'Stamp_IC_WC_Settings_Repository' ) )
+		            ->addMethodCall( 'set_notifications_repository', array( 'Stamp_IC_WC_Settings_Notifications_Repository' ) )
+					->addMethodCall( 'set_api_client', array( 'Stamp_IC_WC_Api_Client' ) );
 
 		$container->add('Stamp_IC_WC_Admin_Loader' )
 		          ->addMethodCall( 'set_container', array( $container ) )

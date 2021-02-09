@@ -31,6 +31,7 @@ class Stamp_IC_WC_Admin_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 		if( is_admin() && current_user_can( 'manage_woocommerce' ) ) {
 			add_action( 'admin_menu', array( $this->admin_settings, 'register_admin_menu_items' ) );
 			add_action( 'init', array( $this->admin_settings, 'save_settings' ) );
+			add_action( 'init', array( $this->admin_settings, 'test_stamp_api_credentials' ) );
 		}
 	}
 }

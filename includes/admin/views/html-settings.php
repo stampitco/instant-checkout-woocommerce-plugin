@@ -2,6 +2,23 @@
 	<h1>
 		<?php _e( 'Instant Checkout', STAMP_IC_WC_TEXT_DOMAIN ) ?>
 	</h1>
+
+    <?php if( is_array( $notifications ) ): ?>
+
+        <?php /* @var Stamp_IC_WC_Settings_Notification $notification */  ?>
+        <?php foreach( $notifications as $notification ): ?>
+            <div class="notice notice-<?php esc_attr( $notification->get_type() ); ?> is-dismissible">
+                <p>
+	                <?php esc_html( $notification->get_message() ); ?>
+                </p>
+                <button type="button" class="notice-dismiss">
+                    <span class="screen-reader-text">Dismiss this notice.</span>
+                </button>
+            </div>
+        <?php endforeach; ?>
+
+    <?php endif; ?>
+
 	<div class="form-wrap">
 		<form
 			action="<?php echo esc_url( admin_url( 'options-general.php?' . http_build_query( array( 'page' => 'stamp-ic-wc' ) ) ) ); ?>"
@@ -33,6 +50,9 @@
                             <p>
                                 <?php _e( 'The api key used to authenticate against the Stamp API', STAMP_IC_WC_TEXT_DOMAIN ); ?>
                             </p>
+	                        <?php if( ! empty( $stamp_api_key ) ) : ?>
+		                        <?php submit_button( __( 'Test credentials', STAMP_IC_WC_TEXT_DOMAIN ), 'primary', 'test_stamp_ic_wc_credentials' ); ?>
+	                        <?php endif; ?>
                         </td>
                     </tr>
                     <tr class="form-field">
@@ -138,8 +158,10 @@
                     </tr>
 				</tbody>
 			</table>
+
 			<?php wp_nonce_field( 'stamp_ic_wc_settings_nonce','stamp_ic_wc_settings_nonce' ); ?>
-			<?php submit_button( __( 'Save', STAMP_IC_WC_TEXT_DOMAIN ), 'primary', 'submit' ); ?>
+			<?php submit_button( __( 'Save settings', STAMP_IC_WC_TEXT_DOMAIN ), 'primary', 'save_stamp_ic_wc_settings' ); ?>
+
 		</form>
 	</div>
 </div>

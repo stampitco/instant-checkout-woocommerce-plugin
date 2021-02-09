@@ -80,6 +80,7 @@ function run_stamp_ic_wc() {
 
 	$container->addServiceProvider( new Stamp_IC_WC_Settings_Service_Provider() );
 	$container->addServiceProvider( new Stamp_IC_WC_Admin_Service_Provider() );
+	$container->addServiceProvider( new Stamp_IC_WC_Notifications_Service_Provider() );
 	$container->addServiceProvider( new Stamp_IC_WC_Stamp_Service_Provider() );
 	$container->addServiceProvider( new Stamp_IC_WC_Assets_Service_Provider() );
 	$container->addServiceProvider( new Stamp_IC_WC_Checkout_Service_Provider() );
