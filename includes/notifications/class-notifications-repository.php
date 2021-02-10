@@ -23,20 +23,74 @@ class Stamp_IC_WC_Settings_Notifications_Repository {
 		);
 	}
 
-	public function add( $key, $type, $message ) {
-		$this->check_key( $key );
-		$this->check_type( $key );
-	}
-
-	public function get( $key, $type = null, $id = null ) {
+	public function add( $key, $type, $message ): Stamp_IC_WC_Settings_Notification {
 
 		$this->check_key( $key );
+		$this->check_type( $type );
 
-		if( ! is_null( $type ) ) {
-			$this->check_type( $key );
+		$notification = new Stamp_IC_WC_Settings_Notification(
+			md5( $message . time() ),
+			$type,
+			$message
+		);
+
+		$notifications = wp_cache_get( $key );
+
+		if( ! is_array( $notifications ) ) {
+			$notifications = array();
 		}
 
+		if( ! array_key_exists( $type, $notifications ) ) {
+			$notifications[ $type ] = array();
+		}
 
+		$notifications[ $type ][] = $notification->to_array();
+
+		wp_cache_set( $key, $notifications );
+
+		return $notification;
+	}
+
+	public function get_all( $key, $type = null ): array {
+
+		$this->check_key( $key );
+
+		$notifications = wp_cache_get( $key );
+
+		if( ! is_array( $notifications ) ) {
+			return array();
+		}
+
+		if( is_null( $type ) ) {
+
+			$transformed = array();
+
+			foreach ( $notifications as $type => $notifications_with_type ) {
+				foreach ( $notifications_with_type as $notification ) {
+					$transformed[] = new Stamp_IC_WC_Settings_Notification(
+						$notification[ 'id' ],
+						$notification[ 'type' ],
+						$notification[ 'message' ]
+					);
+				}
+			}
+
+			return $transformed;
+		}
+
+		$this->check_type( $type );
+
+		if( ! array_key_exists( $type, $notifications ) ) {
+			return array();
+		}
+
+		return array_map( function( $notification ) {
+			return new Stamp_IC_WC_Settings_Notification(
+				$notification[ 'id' ],
+				$notification[ 'type' ],
+				$notification[ 'message' ]
+			);
+		}, $notifications[ $type ] );
 	}
 
 	public function check_key( $key, $quiet = false ): bool {

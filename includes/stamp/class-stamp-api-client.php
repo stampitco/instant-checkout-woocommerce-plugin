@@ -118,6 +118,16 @@ class Stamp_IC_WC_Api_Client {
 			);
 		}
 
-		return wp_remote_retrieve_body( $response );
+		$body = wp_remote_retrieve_body( $response );
+
+		if( is_string( $body ) ) {
+			$body = json_decode( $body );
+		}
+
+		if( $body instanceof stdClass ) {
+			$body = (array) $body;
+		}
+
+		return $body;
     }
 }

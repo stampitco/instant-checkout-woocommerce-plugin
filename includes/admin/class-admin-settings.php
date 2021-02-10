@@ -143,7 +143,7 @@ class Stamp_IC_WC_Admin_Settings {
 				Stamp_IC_WC_Settings_Notifications_Repository::SETTINGS,
 				Stamp_IC_WC_Settings_Notification::ERROR,
 				sprintf(
-					__( 'Failed to save WooCommerce credentials in the Stamp API. Error: %s. Code: %d', STAMP_IC_WC_TEXT_DOMAIN ),
+					__( 'Failed to verify Stamp API credentials. Error: %s. Code: %d', STAMP_IC_WC_TEXT_DOMAIN ),
 					$result[ 'message' ],
 					$result[ 'code' ]
 				)
@@ -151,10 +151,19 @@ class Stamp_IC_WC_Admin_Settings {
 		}
 
 		if( empty( $result[ 'error' ] ) ) {
+
+			$message = __( 'Stamp API credentials were successfully verified.', STAMP_IC_WC_TEXT_DOMAIN );
+
+			if( is_array( $result ) ) {
+				foreach ( $result as $param => $value ) {
+					$message .= sprintf( ' %s: %s.', $param, $value );
+				}
+			}
+
 			$this->get_notifications_repository()->add(
 				Stamp_IC_WC_Settings_Notifications_Repository::SETTINGS,
 				Stamp_IC_WC_Settings_Notification::SUCCESS,
-				__( 'WooCommerce credentials were successfully saved in the Stamp API.', STAMP_IC_WC_TEXT_DOMAIN )
+				$message
 			);
 		}
 	}
@@ -193,7 +202,7 @@ class Stamp_IC_WC_Admin_Settings {
 
         }
 
-        $notifications = $this->get_notifications_repository()->get( Stamp_IC_WC_Settings_Notifications_Repository::SETTINGS );
+        $notifications = $this->get_notifications_repository()->get_all( Stamp_IC_WC_Settings_Notifications_Repository::SETTINGS );
 
 		include __DIR__ . '/views/html-settings.php';
 	}

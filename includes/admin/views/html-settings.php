@@ -7,9 +7,9 @@
 
         <?php /* @var Stamp_IC_WC_Settings_Notification $notification */  ?>
         <?php foreach( $notifications as $notification ): ?>
-            <div class="notice notice-<?php esc_attr( $notification->get_type() ); ?> is-dismissible">
+            <div class="notice notice-<?php echo esc_attr( $notification->get_type() ); ?> is-dismissible">
                 <p>
-	                <?php esc_html( $notification->get_message() ); ?>
+	                <?php echo esc_html( $notification->get_message() ); ?>
                 </p>
                 <button type="button" class="notice-dismiss">
                     <span class="screen-reader-text">Dismiss this notice.</span>

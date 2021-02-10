@@ -111,4 +111,12 @@ class Stamp_IC_WC_Settings_Notification {
 	public function is_warning(): bool {
 		return $this->get_type() === static::WARNING;
 	}
+
+	public function to_array(): array {
+		return array(
+			'id' => $this->get_id(),
+			'type' => $this->get_type(),
+			'message' => $this->get_message(),
+		);
+	}
 }
