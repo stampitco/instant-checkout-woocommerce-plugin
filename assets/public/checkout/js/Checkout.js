@@ -117,25 +117,23 @@ Checkout.prototype.onCheckoutButtonClick = async function onCheckoutButtonClick(
         this.$element.addClass( 'stamp-ic-checkout-loading' );
         this.$element.trigger( GET_CHECKOUT_URL_STARTED, [ data ] );
 
+        this.checkoutWindow.open( {
+            product_id: data.product_id,
+            $invoker: this.$element,
+            title: '_blank',
+            params: 'scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=400,height=900'
+        } );
+
         try {
-
             const result = await this.api.getCheckoutUrl( data );
-
             this.$element.trigger( GET_CHECKOUT_URL_SUCCESS, [ data, result ] );
-
-            this.checkoutWindow.open( {
-                url: result.checkout_url,
-                product_id: data.product_id,
-                $invoker: this.$element,
-                title: '_blank',
-                params: 'scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=400,height=900'
-            } );
-
+            this.checkoutWindow.setUrl( result.checkout_url );
         } catch ( error ) {
             this.$element.trigger( GET_CHECKOUT_URL_ERROR, [ data, error ] );
             if( this.debug ) {
                 console.error( 'Instant Checkout: Failed to get the checkout url from the backend' + error );
             }
+            this.checkoutWindow.close();
         }
 
         this.$element.removeClass( 'stamp-ic-checkout-loading' );

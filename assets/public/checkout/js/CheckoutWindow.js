@@ -15,13 +15,13 @@ const CheckoutWindow = function CheckoutWindow( { checkoutWindow, $invoker } ) {
 CheckoutWindow.prototype.open = function open( { url, params, title, $invoker } ) {
     if( ! this.checkoutWindow ) {
 
-        this.checkoutWindow = window.open( url, title, params  );
+        this.checkoutWindow = window.open( url ?? '', title, params  );
 
         this.$invoker = $invoker;
 
         $( document ).trigger( CHECKOUT_WINDOW_OPENED, [ this.$invoker ] );
 
-        this.monitorInterval = window.setInterval( this.monitor.bind(this), 1000 );
+        this.monitorInterval = window.setInterval( this.monitor.bind(this), 600 );
     }
 };
 
@@ -36,6 +36,12 @@ CheckoutWindow.prototype.monitor = function monitor() {
         catch ( error ) {
             console.error( error );
         }
+    }
+};
+
+CheckoutWindow.prototype.setUrl = function setUrl( url ) {
+    if( this.checkoutWindow ) {
+        this.checkoutWindow.location.href = url;
     }
 };
 
