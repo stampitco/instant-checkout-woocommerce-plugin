@@ -1,151 +1,144 @@
 import $ from 'jquery';
 
 import {
+    CHECKOUT_WINDOW_CLOSED,
+    GET_CHECKOUT_URL_ERROR,
     GET_CHECKOUT_URL_STARTED,
     GET_CHECKOUT_URL_SUCCESS,
-    GET_CHECKOUT_URL_ERROR,
-    CHECKOUT_WINDOW_CLOSED,
 } from './events';
 
 const Checkout = function Checkout( params ) {
 
     const {
-        $element,
+        $button,
         api,
         debug,
-        checkoutWindow
+        mediator,
     } = params;
 
-    this.$element = $element;
+    this.$button = $button;
     this.api = api;
-    this.checkoutWindow = checkoutWindow;
     this.debug = debug;
+    this.mediator = mediator;
 
     this.init();
 }
 
 Checkout.prototype.init = function init() {
+    this.mediator.subscribe( CHECKOUT_WINDOW_CLOSED, this.onCheckoutWindowClosed.bind( this ) );
     this.bindEvents();
 };
 
 Checkout.prototype.bindEvents = function bindEvents() {
-    this.$element.click( this.onCheckoutButtonClick.bind( this ) );
-    this.$element.on( GET_CHECKOUT_URL_ERROR, this.onGetCheckoutUrlError.bind( this ) );
-    $(document).on( CHECKOUT_WINDOW_CLOSED, this.onGetCheckoutWindowClosed.bind( this ) );
+    this.$button.click( this.onCheckoutButtonClick.bind( this ) );
 };
 
-Checkout.prototype.onGetCheckoutWindowClosed = async function onGetCheckoutWindowClosed( event, $invoker ) {
-    if( $invoker.is( this.$element ) ) {
-        this.enableButton();
-    }
-}
-
-Checkout.prototype.onGetCheckoutUrlError = async function onGetCheckoutUrlError( event ) {
-    if( $(event.target).is( this.$element ) ) {
-        this.enableButton();
-    }
-}
+Checkout.prototype.onCheckoutWindowClosed = function onCheckoutWindowClosed() {
+    this.disableButtonLoading();
+};
 
 Checkout.prototype.onCheckoutButtonClick = async function onCheckoutButtonClick( event ) {
 
     event.preventDefault();
 
-    if( this.isOnSingleProductPage() ) {
+    this.enableButtonLoading();
 
-        const $cartForm = this.$element.parents('form.cart');
+    const params = this.getCheckoutParams();
 
-        if( $cartForm.length === 0 ) {
-            if( this.debug ) {
-                console.error( 'Instant Checkout: Cart form html element missing' );
-            }
-            return;
+    if( ! params ) {
+        return;
+    }
+
+    this.$button.trigger( GET_CHECKOUT_URL_STARTED, [ params ] );
+    this.mediator.publish( GET_CHECKOUT_URL_STARTED, params );
+
+    try {
+        const result = await this.api.getCheckoutUrl( params );
+        this.$button.trigger( GET_CHECKOUT_URL_SUCCESS, [ params, result ] );
+        this.mediator.publish( GET_CHECKOUT_URL_SUCCESS, params, result );
+    } catch ( error ) {
+        this.$button.trigger( GET_CHECKOUT_URL_ERROR, [ params, error ] );
+        this.disableButtonLoading();
+        if( this.debug ) {
+            console.error( 'Instant Checkout: Failed to get the checkout url from the backend' + error );
         }
+    }
+}
 
-        const data = {
-            product_id: this.$element.data( 'product_id' ),
-            qty: parseInt( $cartForm.find( 'input[name="quantity"]' ).val() ),
-        };
+Checkout.prototype.disableButtonLoading = function disableButtonLoading() {
+    this.$button.attr( { disabled: false } ).removeClass( 'stamp-ic-checkout-loading' );
+};
 
-        if( ! data.qty ) {
+Checkout.prototype.enableButtonLoading = function enableButtonLoading() {
+    this.$button.attr( { disabled: true } ).addClass( 'stamp-ic-checkout-loading' );
+};
 
+Checkout.prototype.getCheckoutParams = function getCheckoutParams() {
+
+    const $cartForm = this.$button.parents('form.cart');
+
+    if( $cartForm.length === 0 ) {
+        if( this.debug ) {
+            console.error( 'Instant Checkout: Cart form html element missing' );
+        }
+        return false;
+    }
+
+    const qty = parseInt( $cartForm.find( 'input[name="quantity"]' ).val() );
+
+    if( ! qty ) {
+        if( this.debug ) {
+            console.error( 'Instant Checkout: Product Qty is empty' );
+        }
+        this.$button.trigger(
+            GET_CHECKOUT_URL_ERROR,
+            [
+                {
+                    errors: [
+                        {
+                            param: 'qty',
+                            message: 'stamp_ic_wc_qty_param_empty'
+                        }
+                    ]
+                }
+            ]
+        );
+        return false;
+    }
+
+    const data = {
+        product_id: this.$button.data( 'product_id' ),
+        qty,
+    };
+
+    if( $cartForm.hasClass( 'variations_form' ) ) {
+
+        const variation_id = parseInt( $cartForm.find( 'input[name="variation_id"]' ).val() );
+
+        if( ! variation_id ) {
             if( this.debug ) {
-                console.error( 'Instant Checkout: Product Qty is empty' );
+                console.error( 'Instant Checkout: Product Variation is empty' );
             }
-
-            this.$element.trigger(
+            this.$button.trigger(
                 GET_CHECKOUT_URL_ERROR,
                 [
-                    data,
                     {
-                        error: {
-                            qty: 'stamp_ic_checkout_get_checkout_url_qty_empty'
-                        }
+                        errors: [
+                            {
+                                param: 'variation_id',
+                                message: 'stamp_ic_wc_variation_id_param_empty'
+                            }
+                        ]
                     }
                 ]
             );
-
-            return;
+            return false;
         }
 
-        if( $cartForm.hasClass( 'variations_form' ) ) {
-
-            data[ 'variation_id' ] = parseInt( $cartForm.find( 'input[name="variation_id"]' ).val() )
-
-            if( ! data.variation_id ) {
-
-                if( this.debug ) {
-                    console.error( 'Instant Checkout: Product Variation is empty' );
-                }
-
-                this.$element.trigger(
-                    GET_CHECKOUT_URL_ERROR,
-                    [
-                        data,
-                        {
-                            error: {
-                                variation_id: 'stamp_ic_checkout_get_checkout_url_variation_id_empty'
-                            }
-                        }
-                    ]
-                );
-
-                return;
-            }
-        }
-
-        this.$element.attr( { disabled: true } );
-        this.$element.addClass( 'stamp-ic-checkout-loading' );
-        this.$element.trigger( GET_CHECKOUT_URL_STARTED, [ data ] );
-
-        this.checkoutWindow.open( {
-            product_id: data.product_id,
-            $invoker: this.$element,
-            title: '_blank',
-            params: 'scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=400,height=900'
-        } );
-
-        try {
-            const result = await this.api.getCheckoutUrl( data );
-            this.$element.trigger( GET_CHECKOUT_URL_SUCCESS, [ data, result ] );
-            this.checkoutWindow.setUrl( result.checkout_url );
-        } catch ( error ) {
-            this.$element.trigger( GET_CHECKOUT_URL_ERROR, [ data, error ] );
-            if( this.debug ) {
-                console.error( 'Instant Checkout: Failed to get the checkout url from the backend' + error );
-            }
-            this.checkoutWindow.close();
-        }
-
-        this.$element.removeClass( 'stamp-ic-checkout-loading' );
+        data[ 'variation_id' ] = variation_id;
     }
-};
 
-Checkout.prototype.disableButton = function disableButton() {
-    this.$element.attr( { disabled: true } );
-};
-
-Checkout.prototype.enableButton = function enableButton() {
-    this.$element.attr( { disabled: false } );
+    return data;
 };
 
 Checkout.prototype.isOnSingleProductPage = function isOnSingleProductPage() {

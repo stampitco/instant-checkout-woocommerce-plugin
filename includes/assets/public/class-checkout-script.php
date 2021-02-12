@@ -29,11 +29,14 @@ class Stamp_IC_WC_Checkout_Script extends Stamp_IC_WC_Abstract_Script {
 
 	public function data( array $params = array() ): array {
 		return array(
-			'nonce' => wp_create_nonce( 'stamp-ic-checkout' ),
-			'nonceName' => 'stamp-ic-checkout',
-            'ajaxUrl' => admin_url('admin-ajax.php'),
-            'getCheckoutUrlAction' => 'stamp_ic_checkout_get_checkout_url',
-            'debug' => defined( 'WP_DEBUG' ) && WP_DEBUG ? 1 : 0,
+			'api' => array(
+				'nonce' => wp_create_nonce( 'stamp-ic-checkout' ),
+				'nonceName' => 'stamp-ic-checkout',
+				'ajaxUrl' => admin_url('admin-ajax.php'),
+				'getCheckoutUrlAction' => 'stamp_ic_checkout_get_checkout_url',
+			),
+//            'debug' => defined( 'WP_DEBUG' ) && WP_DEBUG ? 1 : 0,
+            'debug' => 1,
 			'overlay' => array(
 				'linkText' => __( 'Click here', STAMP_IC_WC_TEXT_DOMAIN ),
 				'overlayText' => __( 'No longer see the Instant Checkout window', STAMP_IC_WC_TEXT_DOMAIN ),

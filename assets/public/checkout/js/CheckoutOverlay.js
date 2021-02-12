@@ -1,10 +1,44 @@
 import $ from 'jquery';
 
-const CheckoutOverlay = function CheckoutOverlay( { logo, linkText, overlayText } ) {
+import {
+    GET_CHECKOUT_URL_ERROR,
+    GET_CHECKOUT_URL_STARTED,
+    CHECKOUT_WINDOW_CLOSED,
+    CHECKOUT_WINDOW_FOCUSED,
+} from './events';
+
+const CheckoutOverlay = function CheckoutOverlay( { logo, linkText, overlayText, mediator } ) {
     this.logo = logo;
     this.linkText = linkText;
     this.overlayText = overlayText;
+    this.mediator = mediator;
     this.$element = null;
+    this.init();
+}
+
+CheckoutOverlay.prototype.init = function init() {
+    this.mediator.subscribe( GET_CHECKOUT_URL_STARTED, this.onGetCheckoutUrlStarted.bind( this ) );
+    this.mediator.subscribe( GET_CHECKOUT_URL_ERROR, this.onGetCheckoutUrlError.bind( this ) );
+    this.mediator.subscribe( CHECKOUT_WINDOW_CLOSED, this.onCheckoutWindowClosed.bind( this ) );
+    this.bindEvents();
+};
+
+CheckoutOverlay.prototype.bindEvents = function bindEvents() {
+    if( this.$element ) {
+        this.$element.find( '#stamp-ic-wc-overlay-link' ).click( this.onOverlayLinkClick.bind( this ) );
+    }
+};
+
+CheckoutOverlay.prototype.onGetCheckoutUrlStarted = function onGetCheckoutUrlStarted() {
+    this.open();
+}
+
+CheckoutOverlay.prototype.onGetCheckoutUrlError = function onGetCheckoutUrlError() {
+    this.close();
+}
+
+CheckoutOverlay.prototype.onCheckoutWindowClosed = function onCheckoutWindowClosed() {
+    this.close();
 }
 
 CheckoutOverlay.prototype.open = function open() {
@@ -16,15 +50,9 @@ CheckoutOverlay.prototype.open = function open() {
     this.$element.addClass( 'stamp-ic-wc-overlay-active' )
 };
 
-CheckoutOverlay.prototype.bindEvents = function bindEvents() {
-    if( this.$element ) {
-        this.$element.find( '#stamp-ic-wc-overlay-link' ).click( this.onOverlayLinkClick.bind( this ) );
-    }
-};
-
 CheckoutOverlay.prototype.onOverlayLinkClick = function onOverlayLinkClick( event ) {
     event.preventDefault();
-    this.remove();
+    this.mediator.publish( CHECKOUT_WINDOW_FOCUSED );
 };
 
 CheckoutOverlay.prototype.isOpened = function isOpened() {

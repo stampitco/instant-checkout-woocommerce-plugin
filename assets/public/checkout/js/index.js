@@ -4,6 +4,7 @@ import Checkout from './Checkout';
 import CheckoutWindow from './CheckoutWindow';
 import CheckoutOverlay from './CheckoutOverlay';
 import Api from './Api';
+import Mediator from './Mediator';
 
 $(function() {
 
@@ -11,18 +12,17 @@ $(function() {
 
     if( $checkoutButton.length > 0 && window.stampIcCheckout ) {
 
-        const api = new Api( window.stampIcCheckout );
-        const checkoutWindow = new CheckoutWindow( { checkoutWindow: null } );
+        const api = new Api( window.stampIcCheckout.api || {} );
+        const mediator = new Mediator( {} );
 
-        const checkoutOverlay = new CheckoutOverlay( window.stampIcCheckout.overlay );
-
-        checkoutOverlay.open();
+        const checkoutWindow = new CheckoutWindow( { mediator } );
+        const checkoutOverlay = new CheckoutOverlay( { ...window.stampIcCheckout.overlay || {}, mediator } );
 
         $checkoutButton.each( function initCheckout() {
             new Checkout( {
-                $element: $(this),
+                $button: $(this),
                 api,
-                checkoutWindow,
+                mediator,
                 debug: parseInt( window.stampIcCheckout.debug ) !== 0,
             } );
         } );
