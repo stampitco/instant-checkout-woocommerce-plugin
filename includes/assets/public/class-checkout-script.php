@@ -34,6 +34,11 @@ class Stamp_IC_WC_Checkout_Script extends Stamp_IC_WC_Abstract_Script {
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'getCheckoutUrlAction' => 'stamp_ic_checkout_get_checkout_url',
             'debug' => defined( 'WP_DEBUG' ) && WP_DEBUG ? 1 : 0,
+			'overlay' => array(
+				'linkText' => __( 'Click here', STAMP_IC_WC_TEXT_DOMAIN ),
+				'overlayText' => __( 'No longer see the Instant Checkout window', STAMP_IC_WC_TEXT_DOMAIN ),
+				'logo' => STAMP_IC_WC_PLUGIN_URL . '/assets/dist/public/images/checkout/instant_checkout-logo.png',
+			)
         );
 	}
 }

@@ -42,6 +42,14 @@ class Stamp_IC_WC_Assets_Service_Provider extends AbstractServiceProvider {
 						new Stamp_IC_WC_Checkout_Script(),
 					)
 				)
+			)
+			->addMethodCall(
+				'set_public_styles',
+				array(
+					array(
+						new Stamp_IC_WC_Checkout_Style(),
+					)
+				)
 			);
 	}
 }
