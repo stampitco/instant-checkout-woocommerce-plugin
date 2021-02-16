@@ -47,7 +47,7 @@ CheckoutWindow.prototype.open = function open( { url } ) {
         const params = 'scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=400,height=900';
         this.popup = window.open( url || '', '_blank', params );
         $( document ).trigger( CHECKOUT_WINDOW_OPENED );
-        this.monitorInterval = window.setInterval( this.monitor.bind(this), 600 );
+        this.monitorInterval = window.setInterval( this.monitor.bind(this), 300 );
     }
 };
 

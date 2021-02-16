@@ -28,9 +28,9 @@ if ( ! defined( 'STAMP_IC_WC_VERSION' ) ) {
 }
 
 if ( ! defined( 'STAMP_API_URL' ) ) {
-	define( 'STAMP_API_URL', 'https://stamp-api-instantcheckout-int.azurewebsites.net' );
+	define( 'STAMP_API_URL', 'https://api-demo.instantcheckout.io' );
 }
 
 if ( ! defined( 'STAMP_WEB_URL' ) ) {
-	define( 'STAMP_WEB_URL', 'https://stamp-web-instantcheckout-int.azurewebsites.net' );
+	define( 'STAMP_WEB_URL', 'https://c-demo.instantcheckout.io' );
 }
