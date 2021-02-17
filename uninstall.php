@@ -6,10 +6,6 @@ if ( ! defined( 'WPINC' ) || ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	die;
 }
 
-if( WP_UNINSTALL_PLUGIN !== 'instant-checkout-woocommerce-plugin/instant-checkout-woocommerce.php' ) {
-	return;
-}
-
 require_once __DIR__ . '/vendor/autoload.php';
 
 $container = Stamp_IC_WC_DI_Container::instance();
@@ -24,7 +20,7 @@ if( class_exists( 'WC_Webhook_Data_Store' ) ) {
 	$webhook_data_store = new WC_Webhook_Data_Store();
 
 	$webhook_order_updated = wc_get_webhook(
-		$this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_WEBHOOK_ORDER_UPDATED_ID )
+		$settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_WEBHOOK_ORDER_UPDATED_ID )
 	);
 
 	if( $webhook_order_updated instanceof WC_Webhook ) {
@@ -32,7 +28,7 @@ if( class_exists( 'WC_Webhook_Data_Store' ) ) {
 	}
 
 	$webhook_order_deleted = wc_get_webhook(
-		$this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_WEBHOOK_ORDER_DELETED_ID )
+		$settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_WEBHOOK_ORDER_DELETED_ID )
 	);
 
 	if( $webhook_order_deleted instanceof WC_Webhook ) {
@@ -45,7 +41,7 @@ global $wpdb;
 $wpdb->delete(
 $wpdb->prefix . 'woocommerce_api_keys',
 	array(
-		'key_id' => $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID )
+		'key_id' => $settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID )
 	),
 	array(
 		'%d'
