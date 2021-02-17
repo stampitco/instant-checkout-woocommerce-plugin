@@ -83,6 +83,10 @@ class Stamp_IC_WC_Credentials extends WC_Auth {
                     $this->settings_repository->set( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID, $consumer_data[ 'key_id' ] );
                 }
 
+	            if( ! empty( $params[ 'stamp_api_key' ] ) ) {
+		            $this->api_client->set_api_token( $params[ 'stamp_api_key' ] );
+	            }
+
                 $result = $this->api_client->save_wc_credentials( array(
                     'ConsumerKey' => $consumer_data[ 'consumer_key' ],
                     'ConsumerSecret' => $consumer_data[ 'consumer_secret' ],
