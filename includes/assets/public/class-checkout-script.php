@@ -24,7 +24,7 @@ class Stamp_IC_WC_Checkout_Script extends Stamp_IC_WC_Abstract_Script {
 	}
 
 	public function should_enqueue(): bool {
-		return function_exists( 'is_product' ) && is_product();
+		return ( function_exists( 'is_product' ) && is_product() ) || ( function_exists( 'is_cart' ) && is_cart() );
 	}
 
 	public function data( array $params = array() ): array {
@@ -40,6 +40,10 @@ class Stamp_IC_WC_Checkout_Script extends Stamp_IC_WC_Abstract_Script {
 				'linkText' => __( 'Click here', STAMP_IC_WC_TEXT_DOMAIN ),
 				'overlayText' => __( 'No longer see the Instant Checkout window?', STAMP_IC_WC_TEXT_DOMAIN ),
 				'logo' => STAMP_IC_WC_PLUGIN_URL . '/assets/dist/public/images/checkout/instant_checkout-logo.png',
+			),
+			'page' => array(
+				'isProduct' => is_product(),
+				'isCart' => is_cart(),
 			)
         );
 	}
