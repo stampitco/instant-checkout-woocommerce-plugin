@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 import {
     CHECKOUT_WINDOW_CLOSED,
     GET_CHECKOUT_URL_ERROR,
@@ -14,12 +12,14 @@ const Checkout = function Checkout( params ) {
         api,
         debug,
         mediator,
+        checkoutParams,
     } = params;
 
     this.$button = $button;
     this.api = api;
     this.debug = debug;
     this.mediator = mediator;
+    this.checkoutParams = checkoutParams;
 
     this.init();
 }
@@ -43,9 +43,10 @@ Checkout.prototype.onCheckoutButtonClick = async function onCheckoutButtonClick(
 
     this.enableButtonLoading();
 
-    const params = this.getCheckoutParams();
+    const params = this.checkoutParams.get();
 
     if( ! params ) {
+        this.disableButtonLoading();
         return;
     }
 
@@ -53,7 +54,7 @@ Checkout.prototype.onCheckoutButtonClick = async function onCheckoutButtonClick(
     this.mediator.publish( GET_CHECKOUT_URL_STARTED, params );
 
     try {
-        const result = await this.api.getCheckoutUrl( params );
+        const result = await this.api.getCheckoutUrl( { items: params } );
         this.$button.trigger( GET_CHECKOUT_URL_SUCCESS, [ params, result ] );
         this.mediator.publish( GET_CHECKOUT_URL_SUCCESS, params, result );
     } catch ( error ) {
@@ -71,79 +72,6 @@ Checkout.prototype.disableButtonLoading = function disableButtonLoading() {
 
 Checkout.prototype.enableButtonLoading = function enableButtonLoading() {
     this.$button.attr( { disabled: true } ).addClass( 'stamp-ic-checkout-loading' );
-};
-
-Checkout.prototype.getCheckoutParams = function getCheckoutParams() {
-
-    const $cartForm = this.$button.parents('form.cart');
-
-    if( $cartForm.length === 0 ) {
-        if( this.debug ) {
-            console.error( 'Instant Checkout: Cart form html element missing' );
-        }
-        return false;
-    }
-
-    const qty = parseInt( $cartForm.find( 'input[name="quantity"]' ).val() );
-
-    if( ! qty ) {
-        if( this.debug ) {
-            console.error( 'Instant Checkout: Product Qty is empty' );
-        }
-        this.$button.trigger(
-            GET_CHECKOUT_URL_ERROR,
-            [
-                {
-                    errors: [
-                        {
-                            param: 'qty',
-                            message: 'stamp_ic_wc_qty_param_empty'
-                        }
-                    ]
-                }
-            ]
-        );
-        return false;
-    }
-
-    const data = {
-        product_id: this.$button.data( 'product_id' ),
-        qty,
-    };
-
-    if( $cartForm.hasClass( 'variations_form' ) ) {
-
-        const variation_id = parseInt( $cartForm.find( 'input[name="variation_id"]' ).val() );
-
-        if( ! variation_id ) {
-            if( this.debug ) {
-                console.error( 'Instant Checkout: Product Variation is empty' );
-            }
-            this.$button.trigger(
-                GET_CHECKOUT_URL_ERROR,
-                [
-                    {
-                        errors: [
-                            {
-                                param: 'variation_id',
-                                message: 'stamp_ic_wc_variation_id_param_empty'
-                            }
-                        ]
-                    }
-                ]
-            );
-            return false;
-        }
-
-        data[ 'variation_id' ] = variation_id;
-    }
-
-    return data;
-};
-
-Checkout.prototype.isOnSingleProductPage = function isOnSingleProductPage() {
-    const $body = $('body');
-    return $body.hasClass('single-product') && $body.hasClass('woocommerce')
 };
 
 export default Checkout;

@@ -58,6 +58,15 @@ class Stamp_IC_WC_Checkout {
             );
         }
 
+	    if( empty( $input[ 'items' ] ) ) {
+		    return array(
+			    'error' => true,
+			    'payload' => array(
+				    'message' => __( 'Missing items param', STAMP_IC_WC_TEXT_DOMAIN )
+			    )
+		    );
+	    }
+
         $app_key = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::STAMP_API_KEY );
 
         if( empty( $app_key ) ) {
@@ -80,59 +89,67 @@ class Stamp_IC_WC_Checkout {
             );
         }
 
-        $product_id = $input[ 'product_id' ] ?? null;
-        $variation_id = $input[ 'variation_id' ] ?? null;
+	    $instant_checkout_url = untrailingslashit( $web_url );
 
-        $product = wc_get_product( $product_id );
-        $variation = null;
+	    $query_args = array(
+		    'appKey' => $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::STAMP_API_KEY ),
+		    'products' => []
+	    );
 
-        if( ! $product instanceof WC_Product ) {
-            return array(
-                'error' => true,
-                'payload' => array(
-                    'message' => __( 'Product not found', STAMP_IC_WC_TEXT_DOMAIN )
-                )
-            );
+        foreach ( $input[ 'items' ] as $item ) {
+
+	        $product_id = $item[ 'product_id' ] ?? null;
+	        $variation_id = $item[ 'variation_id' ] ?? null;
+
+	        $product = wc_get_product( $product_id );
+
+	        if( ! $product instanceof WC_Product ) {
+		        return array(
+			        'error' => true,
+			        'payload' => array(
+				        'message' => __( 'Product not found', STAMP_IC_WC_TEXT_DOMAIN )
+			        )
+		        );
+	        }
+
+	        $qty = $item[ 'qty' ] ?? null;
+
+	        if( empty( $qty ) ) {
+		        return array(
+			        'error' => true,
+			        'payload' => array(
+				        'message' => __( 'Product qty is empty', STAMP_IC_WC_TEXT_DOMAIN )
+			        )
+		        );
+	        }
+
+	        $product_query_param = array(
+		        'i' => $product_id,
+		        'q' => $qty,
+	        );
+
+	        if( $product->is_type( 'variable' ) ) {
+
+		        if( is_null( $variation_id ) || ! in_array( $variation_id, $product->get_children() ) ) {
+			        return array(
+				        'error' => true,
+				        'payload' => array(
+					        'message' => __( 'Variation does not belong to this product', STAMP_IC_WC_TEXT_DOMAIN )
+				        )
+			        );
+		        }
+
+		        $variation = wc_get_product( $variation_id );
+
+		        if( $variation instanceof WC_Product_Variation ) {
+			        $product_query_param[ 'i' ] = $variation_id;
+		        }
+	        }
+
+	        $query_args[ 'products' ][] = $product_query_param;
         }
 
-        if( $product->is_type( 'variable' ) ) {
-
-            if( is_null( $variation_id ) || ! in_array( $variation_id, $product->get_children() ) ) {
-                return array(
-                    'error' => true,
-                    'payload' => array(
-                        'message' => __( 'Variation does not belong to this product', STAMP_IC_WC_TEXT_DOMAIN )
-                    )
-                );
-            }
-
-            $variation = wc_get_product( $variation_id );
-        }
-
-        $qty = $input[ 'qty' ] ?? null;
-
-        if( empty( $qty ) ) {
-            return array(
-                'error' => true,
-                'payload' => array(
-                    'message' => __( 'Product qty is empty', STAMP_IC_WC_TEXT_DOMAIN )
-                )
-            );
-        }
-
-        $instant_checkout_url = untrailingslashit( $web_url );
-
-        $query_args = array(
-            'productId' => $product_id,
-            'sku' => $product->get_sku(),
-            'quantity' => $qty,
-            'appKey' => $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::STAMP_API_KEY ),
-        );
-
-        if( $variation instanceof WC_Product_Variation ) {
-            $query_args[ 'productId' ] = $variation_id;
-            $query_args[ 'sku' ] = $variation->get_sku();
-        }
+	    $query_args[ 'products' ] = json_encode( $query_args[ 'products' ] );
 
         return array(
             'error' => false,
@@ -146,21 +163,20 @@ class Stamp_IC_WC_Checkout {
         );
     }
 
-    public function show_checkout_button( $product_id, array $params = array(), $output = true ): ?array {
+    public function show_checkout_button() {
 
         $attributes = apply_filters(
             'stamp_ic_checkout_button_attributes',
             array(
-                'data-product_id' => $product_id,
                 'class' => array(
                     'woocommerce-button',
-                    'woocommerce-Button',
                     'button',
+                    'alt',
                     'stamp-ic-checkout-button',
                 ),
-                'id' => 'stamp-ic-checkout-button-' . $product_id,
                 'href' => '#',
                 'type' => 'button',
+                'id' => 'stamp-ic-checkout-button',
             )
         );
 
@@ -200,11 +216,18 @@ class Stamp_IC_WC_Checkout {
 
         $html = apply_filters( 'stamp_ic_checkout_button_html', $html );
 
-        if( $output === true ) {
-            echo implode( ' ', $html );
-            return null;
-        }
+	    echo implode( ' ', $html );
+    }
 
-        return $html;
+    public function init_checkout_button_display() {
+
+    	$custom_position = apply_filters( 'stamp_ic_checkout_button_custom_position', false );
+
+    	if( $custom_position ) {
+		    add_action( 'stamp_ic_checkout_do_checkout_button', array( $this, 'show_checkout_button' ) );
+		    return;
+	    }
+
+	    add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'show_checkout_button' ) );
     }
 }
