@@ -80,11 +80,15 @@ CheckoutParams.prototype.getFromProductPage = function getFromProductPage() {
 
     data[ 'product_id' ] = parseInt( $form.find( '[name="add-to-cart"]' ).val() );
 
-    return [ data ];
+    return {
+        items: [ data ]
+    };
 };
 
 CheckoutParams.prototype.getFromCartPage = function getFromCartPage() {
-
+    return {
+        fromCart: true
+    }
 };
 
 export default CheckoutParams;

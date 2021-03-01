@@ -47,7 +47,8 @@ CheckoutOverlay.prototype.open = function open() {
         $( 'body' ).append( this.$element );
         this.bindEvents();
     }
-    this.$element.addClass( 'stamp-ic-wc-overlay-active' )
+    this.$element.removeClass( 'stamp-ic-wc-overlay-hidden' );
+    this.$element.addClass( 'stamp-ic-wc-overlay-active' );
 };
 
 CheckoutOverlay.prototype.onOverlayLinkClick = function onOverlayLinkClick( event ) {
@@ -61,7 +62,8 @@ CheckoutOverlay.prototype.isOpened = function isOpened() {
 
 CheckoutOverlay.prototype.close = function close() {
     if( this.$element ) {
-        this.$element.removeClass( 'stamp-ic-wc-overlay-active' )
+        this.$element.removeClass( 'stamp-ic-wc-overlay-active' );
+        this.$element.addClass( 'stamp-ic-wc-overlay-hidden' );
     }
 };
 
@@ -73,7 +75,7 @@ CheckoutOverlay.prototype.remove = function remove() {
 
 CheckoutOverlay.prototype.getHtml = function getHtml() {
     return `
-        <div id="stamp-ic-wc-overlay">
+        <div id="stamp-ic-wc-overlay" class="stamp-ic-wc-overlay-hidden">
             <div id="stamp-ic-wc-overlay-modal">
                 <img src="${this.logo}" alt="${this.linkText}" id="stamp-ic-wc-overlay-logo">
                 <p id="stamp-ic-wc-overlay-text">${this.overlayText}</p>

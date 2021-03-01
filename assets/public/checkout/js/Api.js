@@ -32,14 +32,20 @@ Api.prototype.getCheckoutUrl = function getCheckoutUrl( data ) {
                 });
             },
             error: function onGetCheckoutUrlError( jqXHR ) {
-                reject({
+
+                const reason = {
                     status: jqXHR.status,
-                    message: jqXHR.responseJSON.data.message,
-                });
+                    message: 'Failed to get the Instant Checkout url'
+                };
+
+                if( jqXHR.responseJSON.hasOwnProperty('data') && jqXHR.responseJSON.data.hasOwnProperty('message') ) {
+                    reason.message = jqXHR.responseJSON.data.message;
+                }
+
+                reject(reason);
             }
         });
     });
-
 };
 
 export default Api;

@@ -18,6 +18,6 @@ class Stamp_IC_WC_Checkout_Style extends Stamp_IC_WC_Abstract_Style {
 	}
 
 	public function should_enqueue(): bool {
-		return function_exists( 'is_product' ) && is_product();
+		return ( function_exists( 'is_product' ) && is_product() ) || ( function_exists( 'is_cart' ) && is_cart() );
 	}
 }

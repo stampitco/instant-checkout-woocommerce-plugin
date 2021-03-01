@@ -9,31 +9,31 @@
     width: 100%;
     background-color: rgba(0,0,0,0.5);
     z-index: 1000;
-  }
-  #stamp-ic-wc-overlay-modal {
-    width: 300px;
-    height: 200px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-top: -100px;
-    margin-left: -150px;
-    background-color: #fff;
-    border-radius: 5px;
-    text-align: center;
-    z-index: 1001;
-    box-shadow: 0 0 3px rgb(0 0 0 / 40%);
-    color: #000;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: column;
-    padding: 20px;
-    #stamp-ic-wc-overlay-text {
-      margin-bottom: 0;
-    }
-    #stamp-ic-wc-overlay-link {
+    #stamp-ic-wc-overlay-modal {
+      width: 300px;
+      height: 200px;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      margin-top: -100px;
+      margin-left: -150px;
+      background-color: #fff;
+      border-radius: 5px;
+      text-align: center;
+      z-index: 1001;
+      box-shadow: 0 0 3px rgb(0 0 0 / 40%);
       color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: column;
+      padding: 20px;
+      #stamp-ic-wc-overlay-text {
+        margin-bottom: 0;
+      }
+      #stamp-ic-wc-overlay-link {
+        color: #000;
+      }
     }
   }
 }

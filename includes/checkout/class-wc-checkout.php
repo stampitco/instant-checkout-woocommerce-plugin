@@ -58,6 +58,28 @@ class Stamp_IC_WC_Checkout {
             );
         }
 
+	    if( ! empty( $input[ 'fromCart' ] ) ) {
+
+		    $input[ 'items' ] = array();
+
+		    foreach ( WC()->cart->get_cart() as $cart_item ) {
+
+		    	if( ! empty( $cart_item[ 'product_id' ] ) && ! empty( $cart_item[ 'quantity' ] ) ) {
+
+		    		$item = array(
+					    'product_id' => $cart_item[ 'product_id' ],
+					    'qty' => $cart_item[ 'quantity' ],
+				    );
+
+				    if( ! empty( $cart_item[ 'variation_id' ] ) ) {
+					    $item[ 'variation_id' ] = $cart_item[ 'variation_id' ];
+				    }
+
+				    $input[ 'items' ][] = $item;
+			    }
+		    }
+	    }
+
 	    if( empty( $input[ 'items' ] ) ) {
 		    return array(
 			    'error' => true,
@@ -229,5 +251,6 @@ class Stamp_IC_WC_Checkout {
 	    }
 
 	    add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'show_checkout_button' ) );
+	    add_action( 'woocommerce_proceed_to_checkout', array( $this, 'show_checkout_button' ), 999 );
     }
 }

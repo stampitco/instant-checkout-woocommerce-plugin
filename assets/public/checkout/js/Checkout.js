@@ -53,12 +53,23 @@ Checkout.prototype.onCheckoutButtonClick = async function onCheckoutButtonClick(
     this.$button.trigger( GET_CHECKOUT_URL_STARTED, [ params ] );
     this.mediator.publish( GET_CHECKOUT_URL_STARTED, params );
 
+    const data = {};
+
+    if(params.hasOwnProperty('fromCart')) {
+        data['fromCart'] = true;
+    }
+
+    if(params.hasOwnProperty('items')) {
+        data['items'] = params.items;
+    }
+
     try {
-        const result = await this.api.getCheckoutUrl( { items: params } );
+        const result = await this.api.getCheckoutUrl( data );
         this.$button.trigger( GET_CHECKOUT_URL_SUCCESS, [ params, result ] );
         this.mediator.publish( GET_CHECKOUT_URL_SUCCESS, params, result );
     } catch ( error ) {
         this.$button.trigger( GET_CHECKOUT_URL_ERROR, [ params, error ] );
+        this.mediator.publish( GET_CHECKOUT_URL_ERROR, params, error );
         this.disableButtonLoading();
         if( this.debug ) {
             console.error( 'Instant Checkout: Failed to get the checkout url from the backend' + error );
