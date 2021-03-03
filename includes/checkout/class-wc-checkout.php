@@ -146,9 +146,8 @@ class Stamp_IC_WC_Checkout {
 	        }
 
 	        $product_query_param = array(
-		        'productId' => $product_id,
-		        'quantity' => $qty,
-		        'sku' => $product->get_sku(),
+		        'i' => $product_id,
+		        'q' => $qty,
 	        );
 
 	        if( $product->is_type( 'variable' ) ) {
@@ -165,28 +164,15 @@ class Stamp_IC_WC_Checkout {
 		        $variation = wc_get_product( $variation_id );
 
 		        if( $variation instanceof WC_Product_Variation ) {
-			        $product_query_param[ 'productId' ] = $variation_id;
-			        $product_query_param[ 'sku' ] = $variation->get_sku();
+			        $product_query_param[ 'i' ] = $variation_id;
 		        }
 	        }
 
 	        $query_args[ 'products' ][] = $product_query_param;
         }
 
-        if( count( $query_args[ 'products' ] ) === 1 ) {
-	        $query_args['productId'] = $query_args[ 'products' ][ 0 ][ 'productId' ];
-	        $query_args['sku'] = $query_args[ 'products' ][ 0 ][ 'sku' ];
-	        $query_args['quantity'] = $query_args[ 'products' ][ 0 ][ 'quantity' ];
-	        unset( $query_args[ 'products' ] );
-        } else {
-        	$products_query = array();
-        	foreach ( $query_args[ 'products' ] as $product_query_param ) {
-		        $products_query[] = array(
-		            'i' => 	$product_query_param[ 'productId' ],
-		            'q' => 	$product_query_param[ 'quantity' ],
-		        );
-	        }
-	        $query_args[ 'products' ] = json_encode( $products_query );
+        if( ! empty( $query_args[ 'products' ] ) ) {
+	        $query_args[ 'products' ] = json_encode( $query_args[ 'products' ] );
         }
 
         return array(
