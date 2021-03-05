@@ -8,7 +8,11 @@ import Api from './Api';
 import Mediator from './Mediator';
 
 $(function() {
+    $('body').on('updated_wc_div', initApp );
+    initApp();
+});
 
+function initApp() {
     const $checkoutButton = $( '#stamp-ic-checkout-button' );
 
     if( $checkoutButton.length > 0 && window.stampIcCheckout ) {
@@ -31,4 +35,4 @@ $(function() {
             debug: parseInt( window.stampIcCheckout.debug ) !== 0,
         } );
     }
-});
+}
