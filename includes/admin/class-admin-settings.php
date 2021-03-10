@@ -206,4 +206,20 @@ class Stamp_IC_WC_Admin_Settings {
 
 		include __DIR__ . '/views/html-settings.php';
 	}
+
+	public function add_settings_link( array $links ): array {
+
+		$settings_link = sprintf(
+			'<a href="%s?%s">%s</a>',
+			admin_url( 'options-general.php' ),
+			http_build_query( array(
+				'page' => 'stamp-ic-wc',
+			) ),
+			__( 'Settings', STAMP_IC_WC_TEXT_DOMAIN )
+		);
+
+		array_unshift( $links, $settings_link );
+
+		return $links;
+	}
 }
