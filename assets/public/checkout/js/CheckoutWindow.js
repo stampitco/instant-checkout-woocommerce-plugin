@@ -7,11 +7,20 @@ import {
     GET_CHECKOUT_URL_STARTED,
     GET_CHECKOUT_URL_SUCCESS,
     GET_CHECKOUT_URL_ERROR,
+    CHECKOUT_ORDER_PLACED,
+    CHECKOUT_ORDER_CANCELED,
+    CHECKOUT_ORDER_NOT_COMPLETED,
 } from './events';
 
-const CheckoutWindow = function CheckoutWindow( { $invoker, mediator } ) {
+/**
+ * CheckoutWindow constructor
+ *
+ * @param {Options} options
+ * @param {Mediator} mediator
+ */
+const CheckoutWindow = function CheckoutWindow( options, mediator ) {
+    this.options = options;
     this.mediator = mediator;
-    this.$invoker = $invoker;
     this.popup = null;
     this.monitorInterval = null;
     this.init();
@@ -22,14 +31,41 @@ CheckoutWindow.prototype.init = function init() {
     this.mediator.subscribe( GET_CHECKOUT_URL_ERROR, this.onGetCheckoutUrlError.bind( this ) );
     this.mediator.subscribe( GET_CHECKOUT_URL_SUCCESS, this.onGetCheckoutUrlSuccess.bind( this ) );
     this.mediator.subscribe( CHECKOUT_WINDOW_FOCUSED, this.onCheckoutWindowFocused.bind( this ) );
+    const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+    const messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+    window[eventMethod](messageEvent,this.onMessageFromPopUpReceived.bind( this ) );
 };
 
 CheckoutWindow.prototype.onGetCheckoutUrlStarted = function onGetCheckoutUrlStarted() {
-    this.open({ url: '' });
+    this.open({ url: null });
 };
 
 CheckoutWindow.prototype.onGetCheckoutUrlError = function onGetCheckoutUrlError() {
     this.close();
+};
+
+CheckoutWindow.prototype.onMessageFromPopUpReceived = function onMessageFromPopUpReceived( event ) {
+
+    const { data, origin } = event;
+
+    if( this.popup && origin === this.options.getStoreUrl() ) {
+        try {
+            const { message } = JSON.parse(data);
+            switch( message ) {
+                case 'ORDER_PLACED':
+                    this.mediator.publish( CHECKOUT_ORDER_PLACED );
+                    break;
+                case 'ORDER_CANCELED':
+                    this.mediator.publish( CHECKOUT_ORDER_CANCELED );
+                    break;
+                case 'ORDER_NOT_COMPLETED':
+                    this.mediator.publish( CHECKOUT_ORDER_NOT_COMPLETED );
+                    break;
+            }
+        } catch( error ) {
+            console.error( error );
+        }
+    }
 };
 
 CheckoutWindow.prototype.onCheckoutWindowFocused = function onCheckoutWindowFocused() {
@@ -45,7 +81,7 @@ CheckoutWindow.prototype.onGetCheckoutUrlSuccess = function onGetCheckoutUrlSucc
 CheckoutWindow.prototype.open = function open( { url } ) {
     if( ! this.popup ) {
         const params = 'scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=400,height=900';
-        this.popup = window.open( url || '', '_blank', params );
+        this.popup = window.open( url || this.options.getPopUpTempUrl(), '_blank', params );
         $( document ).trigger( CHECKOUT_WINDOW_OPENED );
         this.monitorInterval = window.setInterval( this.monitor.bind(this), 300 );
     }

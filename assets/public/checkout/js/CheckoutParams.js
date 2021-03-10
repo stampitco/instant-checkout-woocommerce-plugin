@@ -4,16 +4,22 @@ import {
     GET_CHECKOUT_PARAMS_ERROR,
 } from './events';
 
-const CheckoutParams = function CheckoutParams( { $button, page, debug } ) {
+/**
+ * CheckoutParams constructor
+ *
+ * @param {Options} options
+ * @param {jQuery} $button
+ */
+const CheckoutParams = function CheckoutParams( options, $button ) {
+    this.options = options;
     this.$button = $button;
-    this.page = page;
 }
 
 CheckoutParams.prototype.get = function get() {
-    if(this.page.isProduct) {
+    if( this.options.isProductPage() ) {
         return this.getFromProductPage();
     }
-    if(this.page.isCart) {
+    if( this.options.isCartPage() ) {
         return this.getFromCartPage();
     }
     return null;

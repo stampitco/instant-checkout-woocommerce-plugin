@@ -7,10 +7,14 @@ import {
     CHECKOUT_WINDOW_FOCUSED,
 } from './events';
 
-const CheckoutOverlay = function CheckoutOverlay( { logo, linkText, overlayText, mediator } ) {
-    this.logo = logo;
-    this.linkText = linkText;
-    this.overlayText = overlayText;
+/**
+ * CheckoutOverlay constructor
+ *
+ * @param {Options} options
+ * @param {Mediator} mediator
+ */
+const CheckoutOverlay = function CheckoutOverlay( options, mediator) {
+    this.options = options;
     this.mediator = mediator;
     this.$element = null;
     this.init();
@@ -77,9 +81,9 @@ CheckoutOverlay.prototype.getHtml = function getHtml() {
     return `
         <div id="stamp-ic-wc-overlay" class="stamp-ic-wc-overlay-hidden">
             <div id="stamp-ic-wc-overlay-modal">
-                <img src="${this.logo}" alt="${this.linkText}" id="stamp-ic-wc-overlay-logo">
-                <p id="stamp-ic-wc-overlay-text">${this.overlayText}</p>
-                <a href="#" id="stamp-ic-wc-overlay-link">${this.linkText}</a>
+                <img src="${this.options.getOverlayLogo()}" alt="${this.options.getOverlayLinkText()}" id="stamp-ic-wc-overlay-logo">
+                <p id="stamp-ic-wc-overlay-text">${this.options.getOverlayText()}</p>
+                <a href="#" id="stamp-ic-wc-overlay-link">${this.options.getOverlayLinkText()}</a>
             </div>
         </div>
     `

@@ -1,5 +1,6 @@
 import $ from 'jquery';
 
+import Options from './Options';
 import Checkout from './Checkout';
 import CheckoutWindow from './CheckoutWindow';
 import CheckoutOverlay from './CheckoutOverlay';
@@ -14,25 +15,11 @@ $(function() {
 
 function initApp() {
     const $checkoutButton = $( '#stamp-ic-checkout-button' );
-
     if( $checkoutButton.length > 0 && window.stampIcCheckout ) {
-
-        const api = new Api( window.stampIcCheckout.api || {} );
+        const options = new Options( window.stampIcCheckout || {} );
         const mediator = new Mediator( {} );
-
-        const checkoutWindow = new CheckoutWindow( { mediator } );
-        const checkoutOverlay = new CheckoutOverlay( { ...window.stampIcCheckout.overlay || {}, mediator } );
-        const checkoutParams = new CheckoutParams({
-            $button: $checkoutButton,
-            page: window.stampIcCheckout.page,
-        })
-
-        const checkout = new Checkout( {
-            $button: $checkoutButton,
-            api,
-            mediator,
-            checkoutParams,
-            debug: parseInt( window.stampIcCheckout.debug ) !== 0,
-        } );
+        new CheckoutWindow( options, mediator );
+        new CheckoutOverlay( options, mediator );
+        new Checkout( options, $checkoutButton, new Api( options ), mediator, new CheckoutParams( options, $checkoutButton ) );
     }
 }

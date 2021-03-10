@@ -7,24 +7,66 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Stamp_IC_WC_Checkout_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 
-    /* @var Stamp_IC_WC_Checkout $wc_checkout */
-    protected $wc_checkout;
+    /* @var Stamp_IC_WC_Checkout_Button $wc_checkout_button */
+    protected $wc_checkout_button;
 
-    /**
-     * @return Stamp_IC_WC_Checkout
-     */
-    public function get_wc_checkout(): Stamp_IC_WC_Checkout {
-        return $this->wc_checkout;
-    }
+	/* @var Stamp_IC_WC_Checkout_Ajax $wc_checkout_ajax */
+	protected $wc_checkout_ajax;
 
-    public function set_wc_checkout( Stamp_IC_WC_Checkout $wc_checkout ): Stamp_IC_WC_Checkout_Loader {
-        $this->wc_checkout = $wc_checkout;
-        return $this;
-    }
+	/**
+	 * @return Stamp_IC_WC_Checkout_Button
+	 */
+	public function get_wc_checkout_button(): Stamp_IC_WC_Checkout_Button {
+		return $this->wc_checkout_button;
+	}
+
+	/**
+	 * @param Stamp_IC_WC_Checkout_Button $wc_checkout_button
+	 *
+	 * @return Stamp_IC_WC_Checkout_Loader
+	 */
+	public function set_wc_checkout_button( Stamp_IC_WC_Checkout_Button $wc_checkout_button ): Stamp_IC_WC_Checkout_Loader {
+		$this->wc_checkout_button = $wc_checkout_button;
+		return $this;
+	}
+
+	/**
+	 * @return Stamp_IC_WC_Checkout_Ajax
+	 */
+	public function get_wc_checkout_ajax(): Stamp_IC_WC_Checkout_Ajax {
+		return $this->wc_checkout_ajax;
+	}
+
+	/**
+	 * @param Stamp_IC_WC_Checkout_Ajax $wc_checkout_ajax
+	 *
+	 * @return Stamp_IC_WC_Checkout_Loader
+	 */
+	public function set_wc_checkout_ajax( Stamp_IC_WC_Checkout_Ajax $wc_checkout_ajax ): Stamp_IC_WC_Checkout_Loader {
+		$this->wc_checkout_ajax = $wc_checkout_ajax;
+		return $this;
+	}
 
     public function run() {
-        add_action( 'after_setup_theme', array( $this->wc_checkout, 'init_checkout_button_display' ) );
-        add_action( 'wp_ajax_stamp_ic_checkout_get_checkout_url', array( $this->wc_checkout, 'get_checkout_url_ajax_handler' ) );
-        add_action( 'wp_ajax_nopriv_stamp_ic_checkout_get_checkout_url', array( $this->wc_checkout, 'get_checkout_url_ajax_handler' ) );
+		$this->init_button();
+		$this->init_ajax();
+    }
+
+    protected function init_button() {
+	    add_action( 'after_setup_theme', array( $this->wc_checkout_button, 'init_checkout_button_display' ) );
+    }
+
+    protected function init_ajax() {
+
+		$actions = array(
+			'wp_ajax_stamp_ic_checkout_get_checkout_url',
+			'wp_ajax_nopriv_stamp_ic_checkout_get_checkout_url',
+			'wp_ajax_stamp_ic_checkout_clear_cart',
+			'wp_ajax_nopriv_stamp_ic_checkout_clear_cart',
+		);
+
+		foreach ( $actions as $action ) {
+			add_action( $action, array( $this->wc_checkout_ajax, 'ajax_handler' ) );
+		}
     }
 }

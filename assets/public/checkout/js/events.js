@@ -8,6 +8,10 @@ const CHECKOUT_WINDOW_OPENED = 'stamp-ic-checkout:checkout-window-opened';
 const CHECKOUT_WINDOW_CLOSED = 'stamp-ic-checkout:checkout-window-closed';
 const CHECKOUT_WINDOW_FOCUSED = 'stamp-ic-checkout:checkout-window-focused';
 
+const CHECKOUT_ORDER_PLACED = 'stamp-ic-checkout:checkout-order-placed';
+const CHECKOUT_ORDER_CANCELED = 'stamp-ic-checkout:checkout-order-canceled';
+const CHECKOUT_ORDER_NOT_COMPLETED = 'stamp-ic-checkout:checkout-order-not-completed';
+
 export {
     GET_CHECKOUT_URL_STARTED,
     GET_CHECKOUT_URL_SUCCESS,
@@ -16,4 +20,7 @@ export {
     CHECKOUT_WINDOW_CLOSED,
     CHECKOUT_WINDOW_FOCUSED,
     GET_CHECKOUT_PARAMS_ERROR,
+    CHECKOUT_ORDER_PLACED,
+    CHECKOUT_ORDER_CANCELED,
+    CHECKOUT_ORDER_NOT_COMPLETED,
 }

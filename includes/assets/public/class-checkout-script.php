@@ -34,8 +34,9 @@ class Stamp_IC_WC_Checkout_Script extends Stamp_IC_WC_Abstract_Script {
 				'nonceName' => 'stamp-ic-checkout',
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'getCheckoutUrlAction' => 'stamp_ic_checkout_get_checkout_url',
+				'clearCartAction' => 'stamp_ic_checkout_clear_cart',
 			),
-            'debug' => defined( 'WP_DEBUG' ) && WP_DEBUG ? 1 : 0,
+            'debug' => defined( 'WP_DEBUG' ) && WP_DEBUG === true ? 1 : 0,
 			'overlay' => array(
 				'linkText' => __( 'Click here', STAMP_IC_WC_TEXT_DOMAIN ),
 				'overlayText' => __( 'No longer see the Instant Checkout window?', STAMP_IC_WC_TEXT_DOMAIN ),
@@ -44,7 +45,11 @@ class Stamp_IC_WC_Checkout_Script extends Stamp_IC_WC_Abstract_Script {
 			'page' => array(
 				'isProduct' => is_product(),
 				'isCart' => is_cart(),
-			)
+			),
+			'siteUrl' => get_home_url(),
+			'popUpTempUrl' => STAMP_IC_WC_PLUGIN_URL . '/assets/public/checkout/popup.html',
+			'instantCheckoutButtonText' => apply_filters( 'stamp_ic_checkout_button_text', __( 'Instant Checkout', STAMP_IC_WC_TEXT_DOMAIN ) ),
+			'orderDoneText' => __( 'Your order was placed', STAMP_IC_WC_TEXT_DOMAIN ),
         );
 	}
 }
