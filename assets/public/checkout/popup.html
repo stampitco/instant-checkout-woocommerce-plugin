@@ -11,8 +11,40 @@
                 height: 100%;
                 line-height: 1.5;
             }
+            @keyframes spinAround {
+                from {
+                    transform: rotate(0);
+                }
+                to {
+                    transform: rotate(359deg);
+                }
+            }
+            .st-loading::after {
+                animation: spinAround 0.5s infinite linear;
+                border: 0.125em solid #0e2540;
+                border-radius: 50%;
+                border-right-color: transparent;
+                border-top-color: transparent;
+                content: '';
+                display: inline-block;
+                font-size: 0.8rem;
+                height: 1em;
+                vertical-align: middle;
+                width: 1em;
+            }
+            .st-loading--main {
+                left: 50%;
+                position: fixed;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 9999;
+            }
+            .st-loading--main::after {
+                font-size: 3rem;
+            }
         </style>
     </head>
     <body>
+        <div class="st-loading st-loading--main"></div>
     </body>
 </html>
