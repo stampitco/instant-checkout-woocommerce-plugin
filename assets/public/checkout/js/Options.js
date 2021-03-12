@@ -94,8 +94,8 @@ Options.prototype.getPopUpTempUrl = function getPopUpTempUrl() {
 /**
  * @return {string}
  */
-Options.prototype.getStoreUrl = function getStoreUrl() {
-    return typeof this.siteUrl !== 'undefined' ? this.siteUrl : ''
+Options.prototype.getPopUpUrl = function getPopUpUrl() {
+    return typeof this.popUpUrl !== 'undefined' ? this.popUpUrl : ''
 }
 
 /**

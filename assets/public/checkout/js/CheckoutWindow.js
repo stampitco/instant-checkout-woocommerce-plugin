@@ -48,7 +48,7 @@ CheckoutWindow.prototype.onMessageFromPopUpReceived = function onMessageFromPopU
 
     const { data, origin } = event;
 
-    if( this.popup && origin === this.options.getStoreUrl() ) {
+    if( this.popup && origin === this.options.getPopUpUrl() ) {
         try {
             const { message } = JSON.parse(data);
             switch( message ) {

@@ -46,8 +46,8 @@ class Stamp_IC_WC_Checkout_Script extends Stamp_IC_WC_Abstract_Script {
 				'isProduct' => is_product(),
 				'isCart' => is_cart(),
 			),
-			'siteUrl' => get_home_url(),
 			'popUpTempUrl' => STAMP_IC_WC_PLUGIN_URL . '/assets/public/checkout/popup.html',
+			'popUpUrl' => STAMP_WEB_URL,
 			'instantCheckoutButtonText' => apply_filters( 'stamp_ic_checkout_button_text', __( 'Instant Checkout', STAMP_IC_WC_TEXT_DOMAIN ) ),
 			'orderDoneText' => __( 'Your order was placed', STAMP_IC_WC_TEXT_DOMAIN ),
         );
