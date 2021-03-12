@@ -32,5 +32,5 @@ if [ -z ${WEB_URL_DEFINITION_LINE_NUMBER+x} ]; then
     exit;
 fi
 
-sed -i -e "${API_URL_DEFINITION_LINE_NUMBER}s/.*/   define( 'STAMP_API_URL', $STAMP_API_URL );/" constants.php
-sed -i -e "${WEB_URL_DEFINITION_LINE_NUMBER}s/.*/   define( 'STAMP_WEB_URL', $STAMP_WEB_URL );/" constants.php
+sed -i -e "${API_URL_DEFINITION_LINE_NUMBER}s/.*/   define( 'STAMP_API_URL', '$STAMP_API_URL' );/" constants.php
+sed -i -e "${WEB_URL_DEFINITION_LINE_NUMBER}s/.*/   define( 'STAMP_WEB_URL', '$STAMP_WEB_URL' );/" constants.php
