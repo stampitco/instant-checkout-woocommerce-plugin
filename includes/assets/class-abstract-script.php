@@ -7,23 +7,23 @@ if ( ! defined( 'WPINC' ) ) {
 
 abstract class Stamp_IC_WC_Abstract_Script {
 
-    abstract public function name(): string;
+    abstract public function name();
 
-    abstract public function url(): string;
+    abstract public function url();
 
-    abstract public function deps(): array;
+    abstract public function deps();
 
-	abstract public function should_enqueue(): bool;
+	abstract public function should_enqueue();
 
-    public function in_footer(): bool {
+    public function in_footer() {
         return true;
     }
 
-    public function version(): string {
+    public function version() {
         return STAMP_IC_WC_VERSION;
     }
 
-    public function data( array $params = array() ): array {
+    public function data( array $params = array() ) {
         return array();
     }
 }

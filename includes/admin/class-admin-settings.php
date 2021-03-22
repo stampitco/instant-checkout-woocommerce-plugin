@@ -19,7 +19,7 @@ class Stamp_IC_WC_Admin_Settings {
 	/**
 	 * @return Stamp_IC_WC_Settings_Repository
 	 */
-	public function get_settings_repository(): Stamp_IC_WC_Settings_Repository {
+	public function get_settings_repository() {
 		return $this->settings_repository;
 	}
 
@@ -28,7 +28,7 @@ class Stamp_IC_WC_Admin_Settings {
 	 *
 	 * @return Stamp_IC_WC_Admin_Settings
 	 */
-	public function set_settings_repository( Stamp_IC_WC_Settings_Repository $settings_repository ): Stamp_IC_WC_Admin_Settings {
+	public function set_settings_repository( Stamp_IC_WC_Settings_Repository $settings_repository ) {
 		$this->settings_repository = $settings_repository;
 		return $this;
 	}
@@ -36,7 +36,7 @@ class Stamp_IC_WC_Admin_Settings {
 	/**
 	 * @return Stamp_IC_WC_Settings_Notifications_Repository
 	 */
-	public function get_notifications_repository(): Stamp_IC_WC_Settings_Notifications_Repository {
+	public function get_notifications_repository() {
 		return $this->notifications_repository;
 	}
 
@@ -45,7 +45,7 @@ class Stamp_IC_WC_Admin_Settings {
 	 *
 	 * @return Stamp_IC_WC_Admin_Settings
 	 */
-	public function set_notifications_repository( Stamp_IC_WC_Settings_Notifications_Repository $notifications_repository ): Stamp_IC_WC_Admin_Settings {
+	public function set_notifications_repository( Stamp_IC_WC_Settings_Notifications_Repository $notifications_repository ) {
 		$this->notifications_repository = $notifications_repository;
 		return $this;
 	}
@@ -53,7 +53,7 @@ class Stamp_IC_WC_Admin_Settings {
 	/**
 	 * @return Stamp_IC_WC_Api_Client
 	 */
-	public function get_api_client(): Stamp_IC_WC_Api_Client {
+	public function get_api_client() {
 		return $this->api_client;
 	}
 
@@ -62,7 +62,7 @@ class Stamp_IC_WC_Admin_Settings {
 	 *
 	 * @return Stamp_IC_WC_Admin_Settings
 	 */
-	public function set_api_client( Stamp_IC_WC_Api_Client $api_client ): Stamp_IC_WC_Admin_Settings {
+	public function set_api_client( Stamp_IC_WC_Api_Client $api_client ) {
 		$this->api_client = $api_client;
 		return $this;
 	}
@@ -207,7 +207,7 @@ class Stamp_IC_WC_Admin_Settings {
 		include __DIR__ . '/views/html-settings.php';
 	}
 
-	public function add_settings_link( array $links ): array {
+	public function add_settings_link( array $links ) {
 
 		$settings_link = sprintf(
 			'<a href="%s?%s">%s</a>',

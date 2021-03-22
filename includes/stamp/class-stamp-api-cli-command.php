@@ -13,7 +13,7 @@ class Stamp_IC_WC_Api_Cli_Command extends Stamp_IC_WooCommerce_Abstract_Cli_Comm
 	/**
 	 * @return Stamp_IC_WC_Api_Client
 	 */
-	public function get_api_client(): Stamp_IC_WC_Api_Client {
+	public function get_api_client() {
 		return $this->api_client;
 	}
 
@@ -22,20 +22,20 @@ class Stamp_IC_WC_Api_Cli_Command extends Stamp_IC_WooCommerce_Abstract_Cli_Comm
 	 *
 	 * @return Stamp_IC_WC_Api_Cli_Command
 	 */
-	public function set_api_client( Stamp_IC_WC_Api_Client $api_client ): Stamp_IC_WC_Api_Cli_Command {
+	public function set_api_client( Stamp_IC_WC_Api_Client $api_client ) {
 		$this->api_client = $api_client;
 		return $this;
 	}
 
-	public function name(): string {
+	public function name() {
 		return 'stamp-api';
 	}
 
-	public function short_description(): string {
+	public function short_description() {
 		return 'Interact with Stamp API from the cli';
 	}
 
-	public function synopsis(): array {
+	public function synopsis() {
 		return array(
 			array(
 				'description' => 'Which action to perform against the Stamp API',

@@ -7,7 +7,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Stamp_IC_WC_Shipping_Service {
 
-	public function get_shipping_rates( array $products, array $destination ): array {
+	public function get_shipping_rates( array $products, array $destination ) {
 
 		$results = array();
 

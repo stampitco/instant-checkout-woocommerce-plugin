@@ -13,7 +13,7 @@ class Stamp_IC_WC_Settings_Cli_Command extends Stamp_IC_WooCommerce_Abstract_Cli
 	/**
 	 * @return Stamp_IC_WC_Settings_Repository
 	 */
-	public function get_settings_repository(): Stamp_IC_WC_Settings_Repository {
+	public function get_settings_repository() {
 		return $this->settings_repository;
 	}
 
@@ -22,20 +22,20 @@ class Stamp_IC_WC_Settings_Cli_Command extends Stamp_IC_WooCommerce_Abstract_Cli
 	 *
 	 * @return Stamp_IC_WC_Settings_Cli_Command
 	 */
-	public function set_settings_repository( Stamp_IC_WC_Settings_Repository $settings_repository ): Stamp_IC_WC_Settings_Cli_Command {
+	public function set_settings_repository( Stamp_IC_WC_Settings_Repository $settings_repository ) {
 		$this->settings_repository = $settings_repository;
 		return $this;
 	}
 
-	public function name(): string {
+	public function name() {
 		return 'settings';
 	}
 
-	public function short_description(): string {
+	public function short_description() {
 		return 'Save plugin settings';
 	}
 
-	public function synopsis(): array {
+	public function synopsis() {
 		return array(
 			array(
 				'description' => 'Stamp API key',

@@ -9,13 +9,13 @@ class Stamp_IC_WC_Settings_Notifications_Repository {
 
 	const SETTINGS = 'stamp_ic_settings_notifications';
 
-	public function get_keys(): array {
+	public function get_keys() {
 		return array(
 			static::SETTINGS,
 		);
 	}
 
-	public function get_types(): array {
+	public function get_types() {
 		return array(
 			Stamp_IC_WC_Settings_Notification::ERROR,
 			Stamp_IC_WC_Settings_Notification::SUCCESS,
@@ -23,7 +23,7 @@ class Stamp_IC_WC_Settings_Notifications_Repository {
 		);
 	}
 
-	public function add( $key, $type, $message ): Stamp_IC_WC_Settings_Notification {
+	public function add( $key, $type, $message ) {
 
 		$this->check_key( $key );
 		$this->check_type( $type );
@@ -51,7 +51,7 @@ class Stamp_IC_WC_Settings_Notifications_Repository {
 		return $notification;
 	}
 
-	public function get_all( $key, $type = null ): array {
+	public function get_all( $key, $type = null ) {
 
 		$this->check_key( $key );
 
@@ -93,7 +93,7 @@ class Stamp_IC_WC_Settings_Notifications_Repository {
 		}, $notifications[ $type ] );
 	}
 
-	public function check_key( $key, $quiet = false ): bool {
+	public function check_key( $key, $quiet = false ) {
 
 		if( ! in_array( $key, $this->get_keys() ) ) {
 
@@ -112,7 +112,7 @@ class Stamp_IC_WC_Settings_Notifications_Repository {
 		return true;
 	}
 
-	public function check_type( $type, $quiet = false ): bool {
+	public function check_type( $type, $quiet = false ) {
 
 		if( ! in_array( $type, $this->get_types() ) ) {
 

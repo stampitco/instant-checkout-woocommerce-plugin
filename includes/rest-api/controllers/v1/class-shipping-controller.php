@@ -32,7 +32,7 @@ class Stamp_IC_WC_Shipping_Rest_Api_Controller extends Stamp_IC_WC_Abstract_Rest
 	/**
 	 * @return Stamp_IC_WC_Shipping_Service
 	 */
-	public function get_shipping_service(): Stamp_IC_WC_Shipping_Service {
+	public function get_shipping_service() {
 		return $this->shipping_service;
 	}
 
@@ -41,7 +41,7 @@ class Stamp_IC_WC_Shipping_Rest_Api_Controller extends Stamp_IC_WC_Abstract_Rest
 	 *
 	 * @return Stamp_IC_WC_Shipping_Rest_Api_Controller
 	 */
-	public function set_shipping_service( Stamp_IC_WC_Shipping_Service $shipping_service ): Stamp_IC_WC_Shipping_Rest_Api_Controller {
+	public function set_shipping_service( Stamp_IC_WC_Shipping_Service $shipping_service ) {
 		$this->shipping_service = $shipping_service;
 		return $this;
 	}
@@ -49,7 +49,7 @@ class Stamp_IC_WC_Shipping_Rest_Api_Controller extends Stamp_IC_WC_Abstract_Rest
 	/**
 	 * @return Stamp_IC_WC_Shipping_Rest_Api_Validator
 	 */
-	public function get_shipping_validator(): Stamp_IC_WC_Shipping_Rest_Api_Validator {
+	public function get_shipping_validator() {
 		return $this->shipping_validator;
 	}
 
@@ -58,7 +58,7 @@ class Stamp_IC_WC_Shipping_Rest_Api_Controller extends Stamp_IC_WC_Abstract_Rest
 	 *
 	 * @return Stamp_IC_WC_Shipping_Rest_Api_Controller
 	 */
-	public function set_shipping_validator( Stamp_IC_WC_Shipping_Rest_Api_Validator $shipping_validator ): Stamp_IC_WC_Shipping_Rest_Api_Controller {
+	public function set_shipping_validator( Stamp_IC_WC_Shipping_Rest_Api_Validator $shipping_validator ) {
 		$this->shipping_validator = $shipping_validator;
 		return $this;
 	}

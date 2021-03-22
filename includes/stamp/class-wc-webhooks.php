@@ -15,7 +15,7 @@ class Stamp_IC_WC_Webhooks {
     /**
      * @return Stamp_IC_WC_Settings_Repository
      */
-    public function get_settings_repository(): Stamp_IC_WC_Settings_Repository {
+    public function get_settings_repository() {
         return $this->settings_repository;
     }
 
@@ -24,7 +24,7 @@ class Stamp_IC_WC_Webhooks {
      *
      * @return Stamp_IC_WC_Webhooks
      */
-    public function set_settings_repository( Stamp_IC_WC_Settings_Repository $settings_repository ): Stamp_IC_WC_Webhooks {
+    public function set_settings_repository( Stamp_IC_WC_Settings_Repository $settings_repository ) {
         $this->settings_repository = $settings_repository;
         return $this;
     }
@@ -62,7 +62,7 @@ class Stamp_IC_WC_Webhooks {
         }
     }
 
-    public function process_webhook_http_params( array $http_args, $arg, $webhook_id ): array {
+    public function process_webhook_http_params( array $http_args, $arg, $webhook_id ) {
 
         $webhook_id = (int) $webhook_id;
 
@@ -76,7 +76,7 @@ class Stamp_IC_WC_Webhooks {
         return $http_args;
     }
 
-    public function create_webhook( $topic, $user_id ): ?WC_Webhook {
+    public function create_webhook( $topic, $user_id ) {
 
         if( ! wc_is_webhook_valid_topic( $topic ) ) {
             return null;

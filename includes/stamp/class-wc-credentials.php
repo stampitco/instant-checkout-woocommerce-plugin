@@ -21,7 +21,7 @@ class Stamp_IC_WC_Credentials extends WC_Auth {
 	/**
 	 * @return Stamp_IC_WC_Settings_Notifications_Repository
 	 */
-	public function get_notifications_repository(): Stamp_IC_WC_Settings_Notifications_Repository {
+	public function get_notifications_repository() {
 		return $this->notifications_repository;
 	}
 
@@ -30,7 +30,7 @@ class Stamp_IC_WC_Credentials extends WC_Auth {
 	 *
 	 * @return Stamp_IC_WC_Credentials
 	 */
-	public function set_notifications_repository( Stamp_IC_WC_Settings_Notifications_Repository $notifications_repository ): Stamp_IC_WC_Credentials {
+	public function set_notifications_repository( Stamp_IC_WC_Settings_Notifications_Repository $notifications_repository ) {
 		$this->notifications_repository = $notifications_repository;
 		return $this;
 	}
@@ -47,7 +47,7 @@ class Stamp_IC_WC_Credentials extends WC_Auth {
 	 *
 	 * @return Stamp_IC_WC_Credentials
 	 */
-	public function set_api_client( Stamp_IC_WC_Api_Client $api_client ): Stamp_IC_WC_Credentials {
+	public function set_api_client( Stamp_IC_WC_Api_Client $api_client ) {
 		$this->api_client = $api_client;
 		return $this;
 	}
@@ -55,7 +55,7 @@ class Stamp_IC_WC_Credentials extends WC_Auth {
 	/**
 	 * @return Stamp_IC_WC_Settings_Repository
 	 */
-	public function get_settings_repository(): Stamp_IC_WC_Settings_Repository {
+	public function get_settings_repository() {
 		return $this->settings_repository;
 	}
 
@@ -64,7 +64,7 @@ class Stamp_IC_WC_Credentials extends WC_Auth {
 	 *
 	 * @return Stamp_IC_WC_Credentials
 	 */
-	public function set_settings_repository( Stamp_IC_WC_Settings_Repository $settings_repository ): Stamp_IC_WC_Credentials {
+	public function set_settings_repository( Stamp_IC_WC_Settings_Repository $settings_repository ) {
 		$this->settings_repository = $settings_repository;
 		return $this;
 	}

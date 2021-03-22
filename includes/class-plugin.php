@@ -15,11 +15,11 @@ class Stamp_IC_WooCommerce_Plugin {
 	/**
 	 * @return array
 	 */
-	public function get_loaders(): array {
+	public function get_loaders(){
 		return $this->loaders;
 	}
 
-	public function set_loaders( array $loaders ): Stamp_IC_WooCommerce_Plugin {
+	public function set_loaders( array $loaders ) {
 
 		/* @var Stamp_IC_WooCommerce_Abstract_Loader $loader */
 		foreach ( $loaders as $loader ) {
@@ -42,7 +42,7 @@ class Stamp_IC_WooCommerce_Plugin {
 	/**
 	 * @return Stamp_IC_WC_DI_Container
 	 */
-	public function get_container(): Stamp_IC_WC_DI_Container {
+	public function get_container() {
 		return $this->container;
 	}
 
@@ -51,7 +51,7 @@ class Stamp_IC_WooCommerce_Plugin {
 	 *
 	 * @return Stamp_IC_WooCommerce_Plugin
 	 */
-	public function set_container( Stamp_IC_WC_DI_Container $container ): Stamp_IC_WooCommerce_Plugin {
+	public function set_container( Stamp_IC_WC_DI_Container $container ) {
 		$this->container = $container;
 		return $this;
 	}
