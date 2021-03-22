@@ -55,7 +55,7 @@ Checkout.prototype.onCheckoutOrderPlaced = async function onCheckoutOrderPlaced(
         if( this.options.isCartPage() ) {
             window.location.reload();
         }
-    }, 10000 );
+    }, 3000 );
 };
 
 Checkout.prototype.onCheckoutWindowClosed = function onCheckoutWindowClosed() {
