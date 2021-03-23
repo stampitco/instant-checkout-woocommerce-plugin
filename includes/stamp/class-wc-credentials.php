@@ -38,7 +38,7 @@ class Stamp_IC_WC_Credentials extends WC_Auth {
 	/**
 	 * @return Stamp_IC_WC_Api_Client
 	 */
-	public function get_api_client(): Stamp_IC_WC_Api_Client {
+	public function get_api_client() {
 		return $this->api_client;
 	}
 

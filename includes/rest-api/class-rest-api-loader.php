@@ -29,7 +29,7 @@ class Stamp_IC_WC_Rest_Api_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 		}
 	}
 
-	public function get_controllers(): array {
+	public function get_controllers() {
 		return $this->controllers;
 	}
 
