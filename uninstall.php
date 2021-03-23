@@ -31,12 +31,10 @@ if( class_exists( 'WC_Webhook_Data_Store' ) ) {
 	}
 }
 
-
 $wc_credentials_id = $settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID );
 
 if( ! empty( $wc_credentials_id ) ) {
 	global $wpdb;
-
 	$wpdb->delete(
 		$wpdb->prefix . 'woocommerce_api_keys',
 		array(
