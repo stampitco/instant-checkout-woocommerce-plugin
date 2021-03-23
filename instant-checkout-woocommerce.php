@@ -31,14 +31,14 @@ function deactivate_stamp_ic_wc() {
 	$deactivator->deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_bg_email_octopus_connector' );
-register_deactivation_hook( __FILE__, 'deactivate_bg_email_octopus_connector' );
+register_activation_hook( __FILE__, 'activate_stamp_ic_wc' );
+register_deactivation_hook( __FILE__, 'deactivate_stamp_ic_wc' );
 
 function run_stamp_ic_wc() {
 
 	$activator = new Stamp_IC_WC_Activator();
 
-	$missing_plugins = $activator->check_for_required_plugins( apply_filters( 'active_plugins', get_option('active_plugins' ) ) );
+	$missing_plugins = $activator->check_for_required_plugins( apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) );
 
 	if( ! empty( $missing_plugins ) ) {
 		array_map( array( $activator, 'report_missing_plugin' ), $missing_plugins );
