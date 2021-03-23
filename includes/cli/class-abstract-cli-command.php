@@ -6,11 +6,11 @@ if ( ! defined( 'WPINC' ) || ! defined( 'WP_CLI' ) ) {
 }
 abstract class Stamp_IC_WooCommerce_Abstract_Cli_Command {
 
-	public function namespace(): string {
+	public function namespace() {
 		return 'stamp-ic-wc';
 	}
 
-	public function definition(): array {
+	public function definition() {
 		return array(
 			'shortdesc' => $this->short_description(),
 			'synopsis' => $this->synopsis(),
@@ -19,7 +19,7 @@ abstract class Stamp_IC_WooCommerce_Abstract_Cli_Command {
 		);
 	}
 
-	public function long_description(): string {
+	public function long_description() {
 		return sprintf(
 			'## EXAMPLES \n\n wp %s %s',
 			$this->namespace(),
@@ -27,11 +27,11 @@ abstract class Stamp_IC_WooCommerce_Abstract_Cli_Command {
 		);
 	}
 
-	abstract public function name(): string;
+	abstract public function name();
 
-	abstract public function short_description(): string;
+	abstract public function short_description();
 
-	abstract public function synopsis(): array;
+	abstract public function synopsis();
 
 	abstract public function run( $args, $assoc_args );
 }

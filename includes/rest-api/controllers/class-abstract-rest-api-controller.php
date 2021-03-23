@@ -9,7 +9,7 @@ abstract class Stamp_IC_WC_Abstract_Rest_Api_Controller extends WP_REST_Controll
 
 	protected $namespace = 'wc-ic-stamp';
 
-	public function authorize( WP_REST_Request $request ): bool {
+	public function authorize( WP_REST_Request $request ) {
 		return current_user_can( 'manage_woocommerce' );
 	}
 }

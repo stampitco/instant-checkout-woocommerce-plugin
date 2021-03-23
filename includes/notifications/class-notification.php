@@ -44,7 +44,7 @@ class Stamp_IC_WC_Settings_Notification {
 	 *
 	 * @return Stamp_IC_WC_Settings_Notification
 	 */
-	public function set_id( $id ): Stamp_IC_WC_Settings_Notification {
+	public function set_id( $id ) {
 		$this->id = $id;
 		return $this;
 	}
@@ -61,7 +61,7 @@ class Stamp_IC_WC_Settings_Notification {
 	 *
 	 * @return Stamp_IC_WC_Settings_Notification
 	 */
-	public function set_type( $type ): Stamp_IC_WC_Settings_Notification {
+	public function set_type( $type ) {
 
 		$types = array(
 			static::ERROR,
@@ -95,24 +95,24 @@ class Stamp_IC_WC_Settings_Notification {
 	 *
 	 * @return Stamp_IC_WC_Settings_Notification
 	 */
-	public function set_message( $message ): Stamp_IC_WC_Settings_Notification {
+	public function set_message( $message ) {
 		$this->message = $message;
 		return $this;
 	}
 
-	public function is_error(): bool {
+	public function is_error() {
 		return $this->get_type() === static::ERROR;
 	}
 
-	public function is_success(): bool {
+	public function is_success() {
 		return $this->get_type() === static::SUCCESS;
 	}
 
-	public function is_warning(): bool {
+	public function is_warning() {
 		return $this->get_type() === static::WARNING;
 	}
 
-	public function to_array(): array {
+	public function to_array() {
 		return array(
 			'id' => $this->get_id(),
 			'type' => $this->get_type(),

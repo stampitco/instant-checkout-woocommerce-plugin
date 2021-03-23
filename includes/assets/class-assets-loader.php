@@ -27,11 +27,11 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	/**
 	 * @return array
 	 */
-	public function get_admin_scripts(): array {
+	public function get_admin_scripts() {
 		return $this->admin_scripts;
 	}
 
-	public function set_admin_scripts( array $admin_scripts ): Stamp_IC_WC_Assets_Loader {
+	public function set_admin_scripts( array $admin_scripts ) {
 		foreach ( $admin_scripts as $script ) {
 			$this->add_script( $script, true );
 		}
@@ -41,11 +41,11 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	/**
 	 * @return array
 	 */
-	public function get_admin_styles(): array {
+	public function get_admin_styles() {
 		return $this->admin_styles;
 	}
 
-	public function set_admin_styles( array $admin_styles ): Stamp_IC_WC_Assets_Loader {
+	public function set_admin_styles( array $admin_styles ) {
 		foreach ( $admin_styles as $style ) {
 			$this->add_style( $style, true );
 		}
@@ -55,7 +55,7 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	/**
 	 * @return array
 	 */
-	public function get_public_scripts(): array {
+	public function get_public_scripts() {
 		return $this->public_scripts;
 	}
 
@@ -64,7 +64,7 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	 *
 	 * @return Stamp_IC_WC_Assets_Loader
 	 */
-	public function set_public_scripts( array $public_scripts ): Stamp_IC_WC_Assets_Loader {
+	public function set_public_scripts( array $public_scripts ) {
 		foreach ( $public_scripts as $script ) {
 			$this->add_script( $script );
 		}
@@ -74,7 +74,7 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	/**
 	 * @return array
 	 */
-	public function get_public_styles(): array {
+	public function get_public_styles() {
 		return $this->public_styles;
 	}
 
@@ -83,7 +83,7 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	 *
 	 * @return Stamp_IC_WC_Assets_Loader
 	 */
-	public function set_public_styles( array $public_styles ): Stamp_IC_WC_Assets_Loader {
+	public function set_public_styles( array $public_styles ) {
 		foreach ( $public_styles as $style ) {
 			$this->add_style( $style );
 		}
@@ -112,7 +112,7 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 		}
 	}
 
-	public function add_script( Stamp_IC_WC_Abstract_Script $script, $in_admin = false ): Stamp_IC_WC_Assets_Loader {
+	public function add_script( Stamp_IC_WC_Abstract_Script $script, $in_admin = false ) {
 		if( $in_admin && ! in_array( $script, $this->admin_scripts ) ) {
 			$this->admin_scripts[] = $script;
 		}
@@ -122,7 +122,7 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 		return $this;
 	}
 
-	public function add_style( Stamp_IC_WC_Abstract_Style $style, $in_admin = false ): Stamp_IC_WC_Assets_Loader {
+	public function add_style( Stamp_IC_WC_Abstract_Style $style, $in_admin = false ) {
 		if( $in_admin && ! in_array( $style, $this->admin_scripts ) ) {
 			$this->admin_styles[] = $style;
 		}
@@ -132,7 +132,7 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 		return $this;
 	}
 
-	public function enqueue_script( Stamp_IC_WC_Abstract_Script $script, $in_admin = false ): Stamp_IC_WC_Assets_Loader {
+	public function enqueue_script( Stamp_IC_WC_Abstract_Script $script, $in_admin = false ) {
 		if( apply_filters( 'stamp_ic_wc_should_enqueue_script', $script->should_enqueue(), $script ) ) {
 
 			wp_enqueue_script(
@@ -152,7 +152,7 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 		return $this;
 	}
 
-	public function enqueue_style( Stamp_IC_WC_Abstract_Style $style, $in_admin = false ): Stamp_IC_WC_Assets_Loader {
+	public function enqueue_style( Stamp_IC_WC_Abstract_Style $style, $in_admin = false ) {
 		if( apply_filters( 'stamp_ic_wc_should_enqueue_style', $style->should_enqueue(), $style ) ) {
 			wp_enqueue_style(
 				$style->name(),

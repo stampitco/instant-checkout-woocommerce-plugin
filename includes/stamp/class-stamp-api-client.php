@@ -11,7 +11,7 @@ class Stamp_IC_WC_Api_Client {
 
     protected $api_token;
 
-	public function get_api_url( $path = null, array $query = array() ): string {
+	public function get_api_url( $path = null, array $query = array() ) {
 
 		if( ! is_null( $path ) ) {
 
@@ -36,7 +36,7 @@ class Stamp_IC_WC_Api_Client {
 	 *
 	 * @return Stamp_IC_WC_Api_Client
 	 */
-	public function set_api_url( $api_url ): Stamp_IC_WC_Api_Client {
+	public function set_api_url( $api_url ) {
 		$this->api_url = $api_url;
 		return $this;
 	}
@@ -53,7 +53,7 @@ class Stamp_IC_WC_Api_Client {
 	 *
 	 * @return Stamp_IC_WC_Api_Client
 	 */
-	public function set_api_token( $api_token ): Stamp_IC_WC_Api_Client {
+	public function set_api_token( $api_token ) {
 		$this->api_token = $api_token;
 		return $this;
 	}

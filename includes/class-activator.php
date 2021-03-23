@@ -13,7 +13,7 @@ class Stamp_IC_WC_Activator {
 		'woocommerce/woocommerce.php' => 'WooCommerce',
 	);
 
-	public function activate( array $active_plugins ): bool {
+	public function activate( array $active_plugins ) {
 
 		$missing_plugins = $this->check_for_required_plugins( $active_plugins );
 
@@ -25,7 +25,7 @@ class Stamp_IC_WC_Activator {
 		return true;
 	}
 
-	public function check_for_required_plugins( array $active_plugins ): array {
+	public function check_for_required_plugins( array $active_plugins ) {
 
 		$missing_plugins = $this->required_plugins;
 

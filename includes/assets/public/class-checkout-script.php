@@ -9,25 +9,25 @@ class Stamp_IC_WC_Checkout_Script extends Stamp_IC_WC_Abstract_Script {
 
 	const NAME = 'stampIcCheckout';
 
-	public function name(): string {
+	public function name() {
 		return static::NAME;
 	}
 
-	public function url(): string {
+	public function url() {
 		return STAMP_IC_WC_PLUGIN_URL . '/assets/dist/public/js/checkout.js';
 	}
 
-	public function deps(): array {
+	public function deps() {
 		return array(
 			'jquery',
 		);
 	}
 
-	public function should_enqueue(): bool {
+	public function should_enqueue() {
 		return ( function_exists( 'is_product' ) && is_product() ) || ( function_exists( 'is_cart' ) && is_cart() );
 	}
 
-	public function data( array $params = array() ): array {
+	public function data( array $params = array() ) {
 		return array(
 			'api' => array(
 				'nonce' => wp_create_nonce( 'stamp-ic-checkout' ),

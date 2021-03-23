@@ -7,21 +7,21 @@ if ( ! defined( 'WPINC' ) ) {
 
 abstract class Stamp_IC_WC_Abstract_Style {
 
-    abstract public function name(): string;
+    abstract public function name();
 
-    abstract public function url(): string;
+    abstract public function url();
 
-	abstract public function should_enqueue(): bool;
+	abstract public function should_enqueue();
 
-    public function version(): string {
+    public function version() {
         return STAMP_IC_WC_VERSION;
     }
 
-    public function media(): string {
+    public function media() {
         return 'all';
     }
 
-    public function deps(): array {
+    public function deps() {
         return array();
     }
 }

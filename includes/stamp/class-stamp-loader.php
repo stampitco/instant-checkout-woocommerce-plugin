@@ -19,7 +19,7 @@ class Stamp_IC_WC_Stamp_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	/**
 	 * @return Stamp_IC_WC_Api_Client
 	 */
-	public function get_api_client(): Stamp_IC_WC_Api_Client {
+	public function get_api_client() {
 		return $this->api_client;
 	}
 
@@ -28,7 +28,7 @@ class Stamp_IC_WC_Stamp_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	 *
 	 * @return Stamp_IC_WC_Stamp_Loader
 	 */
-	public function set_api_client( Stamp_IC_WC_Api_Client $api_client ): Stamp_IC_WC_Stamp_Loader {
+	public function set_api_client( Stamp_IC_WC_Api_Client $api_client ) {
 		$this->api_client = $api_client;
 		return $this;
 	}
@@ -45,7 +45,7 @@ class Stamp_IC_WC_Stamp_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	 *
 	 * @return Stamp_IC_WC_Stamp_Loader
 	 */
-	public function set_wc_credentials( Stamp_IC_WC_Credentials $wc_credentials ): Stamp_IC_WC_Stamp_Loader {
+	public function set_wc_credentials( Stamp_IC_WC_Credentials $wc_credentials ) {
 		$this->wc_credentials = $wc_credentials;
 		return $this;
 	}
@@ -61,7 +61,7 @@ class Stamp_IC_WC_Stamp_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
      * @param Stamp_IC_WC_Webhooks $wc_webhooks
      * @return Stamp_IC_WC_Stamp_Loader
      */
-    public function set_wc_webhooks( Stamp_IC_WC_Webhooks $wc_webhooks ): Stamp_IC_WC_Stamp_Loader {
+    public function set_wc_webhooks( Stamp_IC_WC_Webhooks $wc_webhooks ) {
         $this->wc_webhooks = $wc_webhooks;
         return $this;
     }

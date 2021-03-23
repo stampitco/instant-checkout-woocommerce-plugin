@@ -22,7 +22,7 @@ class Stamp_IC_WC_Admin_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	 *
 	 * @return Stamp_IC_WC_Admin_Loader
 	 */
-	public function set_admin_settings( Stamp_IC_WC_Admin_Settings $admin_settings ): Stamp_IC_WC_Admin_Loader {
+	public function set_admin_settings( Stamp_IC_WC_Admin_Settings $admin_settings ) {
 		$this->admin_settings = $admin_settings;
 		return $this;
 	}

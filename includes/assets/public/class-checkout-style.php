@@ -9,15 +9,15 @@ class Stamp_IC_WC_Checkout_Style extends Stamp_IC_WC_Abstract_Style {
 
 	const NAME = 'stampIcCheckoutStyle';
 
-	public function name(): string {
+	public function name() {
 		return static::NAME;
 	}
 
-	public function url(): string {
+	public function url() {
 		return STAMP_IC_WC_PLUGIN_URL . '/assets/dist/public/css/checkout.css';
 	}
 
-	public function should_enqueue(): bool {
+	public function should_enqueue() {
 		return ( function_exists( 'is_product' ) && is_product() ) || ( function_exists( 'is_cart' ) && is_cart() );
 	}
 }

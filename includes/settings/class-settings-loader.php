@@ -13,7 +13,7 @@ class Stamp_IC_WC_Settings_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	/**
 	 * @return Stamp_IC_WC_Settings_Repository
 	 */
-	public function get_settings_repository(): Stamp_IC_WC_Settings_Repository {
+	public function get_settings_repository() {
 		return $this->settings_repository;
 	}
 
@@ -22,7 +22,7 @@ class Stamp_IC_WC_Settings_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	 *
 	 * @return Stamp_IC_WC_Settings_Loader
 	 */
-	public function set_settings_repository( Stamp_IC_WC_Settings_Repository $settings_repository ): Stamp_IC_WC_Settings_Loader {
+	public function set_settings_repository( Stamp_IC_WC_Settings_Repository $settings_repository ) {
 		$this->settings_repository = $settings_repository;
 		return $this;
 	}

@@ -15,7 +15,7 @@ class Stamp_IC_WC_Settings_Repository {
 
 	const WC_WEBHOOK_ORDER_DELETED_ID = 'stamp_ic_wc_webhook_order_deleted_id';
 
-	public function get_options(): array {
+	public function get_options() {
 		return array(
 			static::STAMP_API_KEY,
 			static::WC_CREDENTIALS_ID,
@@ -29,7 +29,7 @@ class Stamp_IC_WC_Settings_Repository {
 		return get_option( $option, $default );
 	}
 
-	public function set( $option, $value, $delete = false ): bool {
+	public function set( $option, $value, $delete = false ) {
 
 		$this->check_option( $option );
 
@@ -44,7 +44,7 @@ class Stamp_IC_WC_Settings_Repository {
 		return $this->set( $option, null, true );
 	}
 
-	public function check_option( $option, $quiet = false ): bool {
+	public function check_option( $option, $quiet = false ) {
 
 		if( ! in_array( $option, $this->get_options() ) ) {
 

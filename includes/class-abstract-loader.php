@@ -17,14 +17,14 @@ abstract class Stamp_IC_WooCommerce_Abstract_Loader {
 	/**
 	 * @return array
 	 */
-	public function get_commands(): array {
+	public function get_commands() {
 		return $this->commands;
 	}
 
 	/**
 	 * @param array $commands
 	 */
-	public function set_commands( array $commands ): void {
+	public function set_commands( array $commands ) {
 
 		/* @var Stamp_IC_WooCommerce_Abstract_Cli_Command $command */
 		foreach ( $commands as $command ) {
@@ -45,7 +45,7 @@ abstract class Stamp_IC_WooCommerce_Abstract_Loader {
 	/**
 	 * @return Stamp_IC_WC_DI_Container
 	 */
-	public function get_container(): Stamp_IC_WC_DI_Container {
+	public function get_container() {
 		return $this->container;
 	}
 
@@ -54,7 +54,7 @@ abstract class Stamp_IC_WooCommerce_Abstract_Loader {
 	 *
 	 * @return Stamp_IC_WooCommerce_Abstract_Loader
 	 */
-	public function set_container( Stamp_IC_WC_DI_Container $container ): Stamp_IC_WooCommerce_Abstract_Loader {
+	public function set_container( Stamp_IC_WC_DI_Container $container ) {
 		$this->container = $container;
 		return $this;
 	}
