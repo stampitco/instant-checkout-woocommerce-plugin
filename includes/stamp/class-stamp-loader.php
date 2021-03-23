@@ -16,6 +16,33 @@ class Stamp_IC_WC_Stamp_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
     /* @var Stamp_IC_WC_Webhooks $wc_webhooks */
     protected $wc_webhooks;
 
+	public function init() {
+		$settings_repository = new Stamp_IC_WC_Settings_Repository();
+
+		$api_client = new Stamp_IC_WC_Api_Client();
+		$api_client->set_api_url( STAMP_API_URL );
+		$api_client->set_api_token( $settings_repository->get( Stamp_IC_WC_Settings_Repository::STAMP_API_KEY ) );
+		$this->set_api_client( $api_client );
+
+		$wc_credentials = new Stamp_IC_WC_Credentials();
+		$wc_credentials->set_settings_repository( $settings_repository );
+		$wc_credentials->set_api_client( $api_client );
+		$wc_credentials->set_notifications_repository( new Stamp_IC_WC_Settings_Notifications_Repository() );
+		$this->set_wc_credentials( $wc_credentials );
+
+		$wc_webhooks = new Stamp_IC_WC_Webhooks();
+		$wc_webhooks->set_settings_repository( $settings_repository );
+		$this->set_wc_webhooks( $wc_webhooks );
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			$stamp_api_cli_command = new Stamp_IC_WC_Api_Cli_Command();
+			$stamp_api_cli_command->set_api_client( $api_client );
+			$this->set_commands( array(
+				$stamp_api_cli_command
+			) );
+		}
+	}
+
 	/**
 	 * @return Stamp_IC_WC_Api_Client
 	 */
@@ -67,32 +94,8 @@ class Stamp_IC_WC_Stamp_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
     }
 
 	public function run() {
-
-		add_action( 'stamp_ic_wc_settings_saved', array( $this->wc_credentials, 'save_wc_credentials' ) );
-		add_action( 'stamp_ic_wc_settings_saved', array( $this->wc_webhooks, 'save_wc_webhooks' ) );
-
-		add_filter( 'woocommerce_webhook_http_args', array( $this->wc_webhooks, 'process_webhook_http_params' ), 10, 3 );
-
-		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			$this->register_cli_commands();
-		}
-	}
-
-	public function register_cli_commands() {
-
-		$this->set_commands(
-			array(
-				$this->container->get( 'Stamp_IC_WC_Api_Cli_Command' ),
-			)
-		);
-
-		/* @var Stamp_IC_WooCommerce_Abstract_Cli_Command $command */
-		foreach ( $this->get_commands() as $command ) {
-			\WP_CLI::add_command(
-				sprintf( '%s %s', $command->namespace(), $command->name() ),
-				array( $command, 'run' ),
-				$command->definition()
-			);
-		}
+		add_action( 'stamp_ic_wc_settings_saved', array( $this->get_wc_credentials(), 'save_wc_credentials' ) );
+		add_action( 'stamp_ic_wc_settings_saved', array( $this->get_wc_webhooks(), 'save_wc_webhooks' ) );
+		add_filter( 'woocommerce_webhook_http_args', array( $this->get_wc_webhooks(), 'process_webhook_http_params' ), 10, 3 );
 	}
 }

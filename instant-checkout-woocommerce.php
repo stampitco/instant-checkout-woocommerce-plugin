@@ -31,44 +31,32 @@ function deactivate_stamp_ic_wc() {
 	$deactivator->deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_bg_email_octopus_connector' );
-register_deactivation_hook( __FILE__, 'deactivate_bg_email_octopus_connector' );
+register_activation_hook( __FILE__, 'activate_stamp_ic_wc' );
+register_deactivation_hook( __FILE__, 'deactivate_stamp_ic_wc' );
 
 function run_stamp_ic_wc() {
 
 	$activator = new Stamp_IC_WC_Activator();
 
-	$missing_plugins = $activator->check_for_required_plugins( apply_filters( 'active_plugins', get_option('active_plugins' ) ) );
+	$missing_plugins = $activator->check_for_required_plugins( apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) );
 
 	if( ! empty( $missing_plugins ) ) {
 		array_map( array( $activator, 'report_missing_plugin' ), $missing_plugins );
 		return;
 	}
 
-	$container = Stamp_IC_WC_DI_Container::instance();
-
-	$container->addServiceProvider( new Stamp_IC_WC_Settings_Service_Provider() );
-	$container->addServiceProvider( new Stamp_IC_WC_Admin_Service_Provider() );
-	$container->addServiceProvider( new Stamp_IC_WC_Notifications_Service_Provider() );
-	$container->addServiceProvider( new Stamp_IC_WC_Stamp_Service_Provider() );
-	$container->addServiceProvider( new Stamp_IC_WC_Assets_Service_Provider() );
-	$container->addServiceProvider( new Stamp_IC_WC_Checkout_Service_Provider() );
-	$container->addServiceProvider( new Stamp_IC_WC_Rest_Api_Service_Provider() );
-	$container->addServiceProvider( new Stamp_IC_WC_Shipping_Service_Provider() );
-
 	$plugin = new Stamp_IC_WooCommerce_Plugin();
 
-	$plugin->set_container( $container )
-			->set_loaders(
-				array(
-					$container->get( 'Stamp_IC_WC_Settings_Loader' ),
-					$container->get( 'Stamp_IC_WC_Admin_Loader' ),
-					$container->get( 'Stamp_IC_WC_Stamp_Loader' ),
-					$container->get( 'Stamp_IC_WC_Assets_Loader' ),
-					$container->get( 'Stamp_IC_WC_Checkout_Loader' ),
-					$container->get( 'Stamp_IC_WC_Rest_Api_Loader' ),
-				)
-			);
+	$plugin->set_loaders(
+		array(
+			new Stamp_IC_WC_Settings_Loader(),
+			new Stamp_IC_WC_Admin_Loader(),
+			new Stamp_IC_WC_Stamp_Loader(),
+			new Stamp_IC_WC_Assets_Loader(),
+			new Stamp_IC_WC_Checkout_Loader(),
+			new Stamp_IC_WC_Rest_Api_Loader(),
+		)
+	);
 
 	$plugin->run();
 }

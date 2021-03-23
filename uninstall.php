@@ -8,12 +8,7 @@ if ( ! defined( 'WPINC' ) || ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$container = Stamp_IC_WC_DI_Container::instance();
-
-$container->addServiceProvider( new Stamp_IC_WC_Settings_Service_Provider() );
-
-/* @var Stamp_IC_WC_Settings_Repository $settings_repository */
-$settings_repository = $container->get( 'Stamp_IC_WC_Settings_Repository' );
+$settings_repository = new Stamp_IC_WC_Settings_Repository();
 
 if( class_exists( 'WC_Webhook_Data_Store' ) ) {
 
@@ -36,17 +31,20 @@ if( class_exists( 'WC_Webhook_Data_Store' ) ) {
 	}
 }
 
-global $wpdb;
+$wc_credentials_id = $settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID );
 
-$wpdb->delete(
-$wpdb->prefix . 'woocommerce_api_keys',
-	array(
-		'key_id' => $settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID )
-	),
-	array(
-		'%d'
-	)
-);
+if( ! empty( $wc_credentials_id ) ) {
+	global $wpdb;
+	$wpdb->delete(
+		$wpdb->prefix . 'woocommerce_api_keys',
+		array(
+			'key_id' => $settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID )
+		),
+		array(
+			'%d'
+		)
+	);
+}
 
 $settings_repository->delete( Stamp_IC_WC_Settings_Repository::STAMP_API_KEY );
 $settings_repository->delete( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID );
