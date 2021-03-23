@@ -63,7 +63,7 @@ class Stamp_IC_WC_Stamp_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	/**
 	 * @return Stamp_IC_WC_Credentials
 	 */
-	public function get_wc_credentials(): Stamp_IC_WC_Credentials {
+	public function get_wc_credentials() {
 		return $this->wc_credentials;
 	}
 
