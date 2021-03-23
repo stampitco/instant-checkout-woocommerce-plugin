@@ -31,17 +31,22 @@ if( class_exists( 'WC_Webhook_Data_Store' ) ) {
 	}
 }
 
-global $wpdb;
 
-$wpdb->delete(
-$wpdb->prefix . 'woocommerce_api_keys',
-	array(
-		'key_id' => $settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID )
-	),
-	array(
-		'%d'
-	)
-);
+$wc_credentials_id = $settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID );
+
+if( ! empty( $wc_credentials_id ) ) {
+	global $wpdb;
+
+	$wpdb->delete(
+		$wpdb->prefix . 'woocommerce_api_keys',
+		array(
+			'key_id' => $settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID )
+		),
+		array(
+			'%d'
+		)
+	);
+}
 
 $settings_repository->delete( Stamp_IC_WC_Settings_Repository::STAMP_API_KEY );
 $settings_repository->delete( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID );
