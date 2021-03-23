@@ -29,9 +29,9 @@ class Stamp_IC_WC_Checkout_Ajax {
 
 	public function ajax_handler() {
 
-		$params = $_POST ?? array();
+		$params = ! empty( $_POST ) ? $_POST : array();
 
-		$result = $this->authorize_request( $params, $params[ 'action' ] ?? null );
+		$result = $this->authorize_request( $params, ! empty( $params[ 'action' ] ) ? $params[ 'action' ] : null );
 
 		if( is_wp_error( $result ) ) {
 			wp_send_json_error( $result, $result->get_error_code() );
@@ -49,7 +49,7 @@ class Stamp_IC_WC_Checkout_Ajax {
 	public function authorize_request( array $params, $action ) {
 		return $this->check_nonce(
 			'stamp-ic-checkout',
-			$params[ 'stamp-ic-checkout' ] ?? null,
+			! empty( $params[ 'stamp-ic-checkout' ] ) ? $params[ 'stamp-ic-checkout' ] : null,
 			$action
 		);
 	}
@@ -86,7 +86,7 @@ class Stamp_IC_WC_Checkout_Ajax {
 
 	public function get_checkout_url( array $input ) {
 
-		$items = $input[ 'items' ] ?? array();
+		$items = ! empty( $input[ 'items' ] ) ? $input[ 'stamp-ic-checkout' ] : array();
 
 		if( ! empty( $input[ 'fromCart' ] ) ) {
 
@@ -142,8 +142,8 @@ class Stamp_IC_WC_Checkout_Ajax {
 
 		foreach ( $items as $item ) {
 
-			$product_id = $item[ 'product_id' ] ?? null;
-			$variation_id = $item[ 'variation_id' ] ?? null;
+			$product_id = ! empty( $item[ 'product_id' ] ) ? $item[ 'product_id' ] : null;
+			$variation_id = ! empty( $item[ 'variation_id' ] ) ? $item[ 'variation_id' ] : null;
 
 			$product = wc_get_product( $product_id );
 
@@ -154,7 +154,7 @@ class Stamp_IC_WC_Checkout_Ajax {
 				);
 			}
 
-			$qty = $item[ 'qty' ] ?? null;
+			$qty = ! empty( $item[ 'qty' ] ) ? $item[ 'qty' ] : null;
 
 			if( empty( $qty ) ) {
 				return new WP_Error(

@@ -80,7 +80,7 @@ class Stamp_IC_WC_Stamp_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
     /**
      * @return Stamp_IC_WC_Webhooks
      */
-    public function get_wc_webhooks(): Stamp_IC_WC_Webhooks {
+    public function get_wc_webhooks() {
         return $this->wc_webhooks;
     }
 

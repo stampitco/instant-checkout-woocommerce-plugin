@@ -31,7 +31,7 @@ class Stamp_IC_WC_Shipping_Service {
 		if ( null === WC()->customer ) {
 			WC()->customer = new WC_Customer( 0, false );
 			WC()->customer->set_shipping_country( $destination[ 'country' ] );
-			WC()->customer->set_shipping_state( $destination[ $destination[ 'state' ] ?? '' ] );
+			WC()->customer->set_shipping_state( ! empty( $destination[ 'state' ] ) ? $destination[ 'state' ] : '' );
 			WC()->customer->set_shipping_postcode( $destination[ 'postcode' ] );
 			WC()->customer->set_shipping_city( $destination[ 'city' ] );
 			WC()->customer->set_shipping_address( $destination[ 'address' ] );
