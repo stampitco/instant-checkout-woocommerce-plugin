@@ -9,22 +9,26 @@ class Stamp_IC_WC_Checkout_Button {
 
     public function show_checkout_button() {
 
-        $attributes = apply_filters(
-            'stamp_ic_checkout_button_attributes',
-            array(
-                'class' => array(
-                    'woocommerce-button',
-                    'button',
-                    'alt',
-                    'stamp-ic-checkout-button',
-                ),
-                'href' => '#',
-                'type' => 'button',
-                'id' => 'stamp-ic-checkout-button',
-            )
-        );
+	    $attributes = array(
+		    'class' => array(
+			    'woocommerce-button',
+			    'button',
+			    'alt',
+			    'stamp-ic-checkout-button',
+		    ),
+		    'href' => '#',
+		    'type' => 'button',
+		    'id' => 'stamp-ic-checkout-button',
+	    );
 
-        $element = apply_filters( 'stamp_ic_checkout_button_element', 'button' ) === 'button' ? 'button' : 'link';
+	    if( is_cart()) {
+		    $attributes[ 'class' ][] = 'wc-forward';
+		    $attributes[ 'class' ][] = 'checkout-button';
+	    }
+
+        $attributes = apply_filters( 'stamp_ic_checkout_button_attributes', $attributes );
+
+        $element = apply_filters( 'stamp_ic_checkout_button_element', is_cart() ? 'link' : 'button' ) === 'button' ? 'button' : 'link';
 
         if( $element === 'button' && ! empty( $attributes[ 'href' ] ) ) {
             unset( $attributes[ 'href' ] );
