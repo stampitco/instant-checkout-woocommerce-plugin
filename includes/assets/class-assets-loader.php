@@ -15,6 +15,21 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 
 	protected $public_styles = array();
 
+	public function init() {
+		$this->set_admin_scripts( array(
+			new Stamp_IC_WC_Admin_Settings_Script(),
+		) );
+		$this->set_admin_styles( array(
+			new Stamp_IC_WC_Admin_Settings_Style(),
+		) );
+		$this->set_public_scripts( array(
+			new Stamp_IC_WC_Checkout_Script(),
+		) );
+		$this->set_public_styles( array(
+			new Stamp_IC_WC_Checkout_Style(),
+		) );
+	}
+
 	public function run() {
 		if( is_admin() ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );

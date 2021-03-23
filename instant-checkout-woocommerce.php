@@ -45,30 +45,18 @@ function run_stamp_ic_wc() {
 		return;
 	}
 
-	$container = Stamp_IC_WC_DI_Container::instance();
-
-	$container->addServiceProvider( new Stamp_IC_WC_Settings_Service_Provider() );
-	$container->addServiceProvider( new Stamp_IC_WC_Admin_Service_Provider() );
-	$container->addServiceProvider( new Stamp_IC_WC_Notifications_Service_Provider() );
-	$container->addServiceProvider( new Stamp_IC_WC_Stamp_Service_Provider() );
-	$container->addServiceProvider( new Stamp_IC_WC_Assets_Service_Provider() );
-	$container->addServiceProvider( new Stamp_IC_WC_Checkout_Service_Provider() );
-	$container->addServiceProvider( new Stamp_IC_WC_Rest_Api_Service_Provider() );
-	$container->addServiceProvider( new Stamp_IC_WC_Shipping_Service_Provider() );
-
 	$plugin = new Stamp_IC_WooCommerce_Plugin();
 
-	$plugin->set_container( $container )
-			->set_loaders(
-				array(
-					$container->get( 'Stamp_IC_WC_Settings_Loader' ),
-					$container->get( 'Stamp_IC_WC_Admin_Loader' ),
-					$container->get( 'Stamp_IC_WC_Stamp_Loader' ),
-					$container->get( 'Stamp_IC_WC_Assets_Loader' ),
-					$container->get( 'Stamp_IC_WC_Checkout_Loader' ),
-					$container->get( 'Stamp_IC_WC_Rest_Api_Loader' ),
-				)
-			);
+	$plugin->set_loaders(
+		array(
+			new Stamp_IC_WC_Settings_Loader(),
+			new Stamp_IC_WC_Admin_Loader(),
+			new Stamp_IC_WC_Stamp_Loader(),
+			new Stamp_IC_WC_Assets_Loader(),
+			new Stamp_IC_WC_Checkout_Loader(),
+			new Stamp_IC_WC_Rest_Api_Loader(),
+		)
+	);
 
 	$plugin->run();
 }

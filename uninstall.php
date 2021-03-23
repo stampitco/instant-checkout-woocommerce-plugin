@@ -8,12 +8,7 @@ if ( ! defined( 'WPINC' ) || ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$container = Stamp_IC_WC_DI_Container::instance();
-
-$container->addServiceProvider( new Stamp_IC_WC_Settings_Service_Provider() );
-
-/* @var Stamp_IC_WC_Settings_Repository $settings_repository */
-$settings_repository = $container->get( 'Stamp_IC_WC_Settings_Repository' );
+$settings_repository = new Stamp_IC_WC_Settings_Repository();
 
 if( class_exists( 'WC_Webhook_Data_Store' ) ) {
 

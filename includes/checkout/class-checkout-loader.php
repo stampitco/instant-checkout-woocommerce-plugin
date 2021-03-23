@@ -13,6 +13,13 @@ class Stamp_IC_WC_Checkout_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	/* @var Stamp_IC_WC_Checkout_Ajax $wc_checkout_ajax */
 	protected $wc_checkout_ajax;
 
+	public function init() {
+		$checkout_ajax_handler = new Stamp_IC_WC_Checkout_Ajax();
+		$checkout_ajax_handler->set_settings_repository( new Stamp_IC_WC_Settings_Repository() );
+		$this->set_wc_checkout_ajax( $checkout_ajax_handler );
+		$this->set_wc_checkout_button( new Stamp_IC_WC_Checkout_Button() );
+	}
+
 	/**
 	 * @return Stamp_IC_WC_Checkout_Button
 	 */

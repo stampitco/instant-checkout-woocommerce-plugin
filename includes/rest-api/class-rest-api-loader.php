@@ -9,6 +9,15 @@ class Stamp_IC_WC_Rest_Api_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 
 	protected $controllers = array();
 
+	public function init() {
+		$shipping_controller = new Stamp_IC_WC_Shipping_Rest_Api_Controller();
+		$shipping_controller->set_shipping_validator( new Stamp_IC_WC_Shipping_Rest_Api_Validator() );
+		$shipping_controller->set_shipping_service( new Stamp_IC_WC_Shipping_Service() );
+		$this->set_controllers( array(
+			$shipping_controller
+		) );
+	}
+
 	public function run() {
 		add_action( 'rest_api_init', array( $this, 'rest_api_init' ), 10 );
 	}

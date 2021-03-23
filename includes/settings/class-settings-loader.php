@@ -10,6 +10,18 @@ class Stamp_IC_WC_Settings_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	/* @var Stamp_IC_WC_Settings_Repository $settings_repository */
 	protected $settings_repository;
 
+	public function init() {
+		$settings_repository = new Stamp_IC_WC_Settings_Repository();
+		$this->set_settings_repository( $settings_repository );
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			$settings_cli_command = new Stamp_IC_WC_Settings_Cli_Command();
+			$settings_cli_command->set_settings_repository( $settings_repository );
+			$this->set_commands( array(
+				$settings_cli_command
+			) );
+		}
+	}
+
 	/**
 	 * @return Stamp_IC_WC_Settings_Repository
 	 */
@@ -28,26 +40,6 @@ class Stamp_IC_WC_Settings_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	}
 
 	public function run() {
-		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			$this->register_cli_commands();
-		}
-	}
 
-	public function register_cli_commands() {
-
-		$this->set_commands(
-			array(
-				$this->container->get( 'Stamp_IC_WC_Settings_Cli_Command' ),
-			)
-		);
-
-		/* @var Stamp_IC_WooCommerce_Abstract_Cli_Command $command */
-		foreach ( $this->get_commands() as $command ) {
-			\WP_CLI::add_command(
-				sprintf( '%s %s', $command->namespace(), $command->name() ),
-				array( $command, 'run' ),
-				$command->definition()
-			);
-		}
 	}
 }

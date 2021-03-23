@@ -7,10 +7,30 @@ if ( ! defined( 'WPINC' ) ) {
 
 abstract class Stamp_IC_WooCommerce_Abstract_Loader {
 
-	/* @var Stamp_IC_WC_DI_Container $container */
-	protected $container;
-
 	protected $commands = array();
+
+	/**
+	 * Stamp_IC_WooCommerce_Abstract_Loader constructor.
+	 */
+	public function __construct() {
+		$this->init();
+		$this->register_cli_commands();
+	}
+
+	public function init() {}
+
+	public function register_cli_commands() {
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			/* @var Stamp_IC_WooCommerce_Abstract_Cli_Command $command */
+			foreach ( $this->get_commands() as $command ) {
+				\WP_CLI::add_command(
+					sprintf( '%s %s', $command->namespace(), $command->name() ),
+					array( $command, 'run' ),
+					$command->definition()
+				);
+			}
+		}
+	}
 
 	abstract public function run();
 
@@ -41,23 +61,4 @@ abstract class Stamp_IC_WooCommerce_Abstract_Loader {
 
 		$this->commands = $commands;
 	}
-
-	/**
-	 * @return Stamp_IC_WC_DI_Container
-	 */
-	public function get_container() {
-		return $this->container;
-	}
-
-	/**
-	 * @param Stamp_IC_WC_DI_Container $container
-	 *
-	 * @return Stamp_IC_WooCommerce_Abstract_Loader
-	 */
-	public function set_container( Stamp_IC_WC_DI_Container $container ) {
-		$this->container = $container;
-		return $this;
-	}
-
-	public function register_cli_commands() {}
 }
