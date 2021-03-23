@@ -86,7 +86,7 @@ class Stamp_IC_WC_Checkout_Ajax {
 
 	public function get_checkout_url( array $input ) {
 
-		$items = ! empty( $input[ 'items' ] ) ? $input[ 'stamp-ic-checkout' ] : array();
+		$items = ! empty( $input[ 'items' ] ) ? $input[ 'items' ] : array();
 
 		if( ! empty( $input[ 'fromCart' ] ) ) {
 
