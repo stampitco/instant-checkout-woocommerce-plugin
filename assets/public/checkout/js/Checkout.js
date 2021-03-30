@@ -73,11 +73,19 @@ Checkout.prototype.onCheckoutButtonClick = async function onCheckoutButtonClick(
 
     this.$button.attr( { disabled: true } ).addClass( 'stamp-ic-checkout-loading' );
 
-    const params = this.checkoutParams.get();
+    const buttonIsFromMiniCart = this.$button.parents( '.widget_shopping_cart' ).length > 0;
 
-    if( ! params ) {
+    let params = this.checkoutParams.get();
+
+    if( ! params && ! buttonIsFromMiniCart ) {
         this.$button.attr( { disabled: false } ).removeClass( 'stamp-ic-checkout-loading' );
         return;
+    }
+
+    if( buttonIsFromMiniCart ) {
+        params = {
+            'fromCart': true
+        };
     }
 
     this.$button.trigger( GET_CHECKOUT_URL_STARTED, [ params ] );
@@ -85,11 +93,11 @@ Checkout.prototype.onCheckoutButtonClick = async function onCheckoutButtonClick(
 
     const data = {};
 
-    if(params.hasOwnProperty('fromCart')) {
+    if( params.hasOwnProperty('fromCart') ) {
         data['fromCart'] = true;
     }
 
-    if(params.hasOwnProperty('items')) {
+    if( params.hasOwnProperty('items') ) {
         data['items'] = params.items;
     }
 

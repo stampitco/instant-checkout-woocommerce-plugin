@@ -168,41 +168,76 @@ class Stamp_IC_WC_Admin_Settings {
 		}
 	}
 
-	public function render() {
+	public function save_styling() {
 
-		$stamp_api_key = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::STAMP_API_KEY );
-
-		$wc_credentials_key_id = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID );
-
-		if( ! empty( $wc_credentials_key_id ) ) {
-			global $wpdb;
-			$wc_credentials_key_id = $wpdb->get_var( $wpdb->prepare( "SELECT key_id FROM {$wpdb->prefix}woocommerce_api_keys WHERE key_id = %d", $wc_credentials_key_id ) );
-			if( empty( $wc_credentials_key_id ) ) {
-                $wc_credentials_key_id = null;
-            }
+		if( empty( $_POST[ 'stamp_ic_wc_styling_nonce' ] ) || empty( $_POST[ 'save_stamp_ic_wc_styling' ] ) ) {
+			return;
 		}
 
-        $webhook_order_updated = null;
+		if ( ! wp_verify_nonce( $_POST['stamp_ic_wc_styling_nonce'], 'stamp_ic_wc_styling_nonce' ) ) {
+			wp_die( __( 'Cheatin&#8217; huh?', STAMP_IC_WC_TEXT_DOMAIN ) );
+		}
 
-        try {
-            $webhook_order_updated = wc_get_webhook(
-                $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_WEBHOOK_ORDER_UPDATED_ID )
-            );
-        } catch (Exception $exception) {
+		$button_color = ! empty( $_POST[ 'stamp_ic_button_color' ] ) ? wc_clean( $_POST[ 'stamp_ic_button_color' ] ) : null;
+		$stamp_ic_button_custom_color = ! empty( $_POST[ 'stamp_ic_button_custom_color' ] ) ? wc_clean( $_POST[ 'stamp_ic_button_custom_color' ] ) : null;
 
-        }
+		if( $button_color === 'custom' && ! empty( $stamp_ic_button_custom_color ) ) {
+			$button_color = $stamp_ic_button_custom_color;
+		}
 
-        $webhook_order_deleted = null;
+		$this->settings_repository->set( Stamp_IC_WC_Settings_Repository::WC_CHECKOUT_BUTTON_COLOR, ltrim( $button_color, '#' ) );
 
-		try {
-            $webhook_order_deleted = wc_get_webhook(
-                $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_WEBHOOK_ORDER_DELETED_ID )
-            );
-        } catch (Exception $exception) {
+		$this->get_notifications_repository()->add(
+			Stamp_IC_WC_Settings_Notifications_Repository::SETTINGS,
+			Stamp_IC_WC_Settings_Notification::SUCCESS,
+			__( 'Plugin styling was saved successfully', STAMP_IC_WC_TEXT_DOMAIN )
+		);
+	}
 
-        }
+	public function render() {
 
         $notifications = $this->get_notifications_repository()->get_all( Stamp_IC_WC_Settings_Notifications_Repository::SETTINGS );
+
+		$active_tab = ! empty( $_GET[ 'tab' ] ) && in_array( $_GET[ 'tab' ], array( 'settings', 'styling' ) ) ? $_GET[ 'tab' ] : 'settings';
+
+		if( $active_tab === 'settings' ) {
+			$stamp_api_key = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::STAMP_API_KEY );
+
+			$wc_credentials_key_id = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CREDENTIALS_ID );
+
+			if( ! empty( $wc_credentials_key_id ) ) {
+				global $wpdb;
+				$wc_credentials_key_id = $wpdb->get_var( $wpdb->prepare( "SELECT key_id FROM {$wpdb->prefix}woocommerce_api_keys WHERE key_id = %d", $wc_credentials_key_id ) );
+				if( empty( $wc_credentials_key_id ) ) {
+					$wc_credentials_key_id = null;
+				}
+			}
+
+			$webhook_order_updated = null;
+
+			try {
+				$webhook_order_updated = wc_get_webhook(
+					$this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_WEBHOOK_ORDER_UPDATED_ID )
+				);
+			} catch (Exception $exception) {
+
+			}
+
+			$webhook_order_deleted = null;
+
+			try {
+				$webhook_order_deleted = wc_get_webhook(
+					$this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_WEBHOOK_ORDER_DELETED_ID )
+				);
+			} catch (Exception $exception) {
+
+			}
+		}
+
+		if( $active_tab === 'styling' ) {
+			$button_color = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CHECKOUT_BUTTON_COLOR );
+			$is_custom_button_color = ! in_array( $button_color, array( 'f7e0e2c', '0a1b2e', 'ff4040', ) );
+		}
 
 		include __DIR__ . '/views/html-settings.php';
 	}

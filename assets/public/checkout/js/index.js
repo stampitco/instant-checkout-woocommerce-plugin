@@ -14,12 +14,18 @@ $(function() {
 });
 
 function initApp() {
-    const $checkoutButton = $( '#stamp-ic-checkout-button' );
-    if( $checkoutButton.length > 0 && window.stampIcCheckout ) {
+    const $checkoutButtons = $( '.stamp-ic-checkout-button' );
+
+    if( $checkoutButtons.length > 0 && window.stampIcCheckout ) {
+
         const options = new Options( window.stampIcCheckout || {} );
         const mediator = new Mediator( {} );
-        new CheckoutWindow( options, mediator );
-        new CheckoutOverlay( options, mediator );
-        new Checkout( options, $checkoutButton, new Api( options ), mediator, new CheckoutParams( options, $checkoutButton ) );
+        const checkoutWindow = new CheckoutWindow( options, mediator );
+        const checkoutOverlay = new CheckoutOverlay( options, mediator );
+        const api = new Api( options );
+
+        $checkoutButtons.each( function( index, button ) {
+            new Checkout( options, $( button ), api, mediator, new CheckoutParams( options, $( button ) ) );
+        } );
     }
 }

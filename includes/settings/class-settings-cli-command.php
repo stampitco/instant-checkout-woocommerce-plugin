@@ -61,6 +61,12 @@ class Stamp_IC_WC_Settings_Cli_Command extends Stamp_IC_WooCommerce_Abstract_Cli
                 'name' => 'stamp_ic_wc_webhook_order_deleted_id',
                 'optional' => true,
             ),
+			array(
+				'description' => 'Instant checkout button color',
+				'type' => 'assoc',
+				'name' => 'stamp_ic_button_custom_color',
+				'optional' => true,
+			),
 		);
 	}
 
@@ -200,6 +206,21 @@ class Stamp_IC_WC_Settings_Cli_Command extends Stamp_IC_WooCommerce_Abstract_Cli
                     )
                 );
             }
+
+	        if( ! empty( $assoc_args[ 'stamp_ic_button_custom_color' ] ) ) {
+
+		        $this->settings_repository->set(
+			        Stamp_IC_WC_Settings_Repository::WC_CHECKOUT_BUTTON_COLOR,
+			        ltrim( $assoc_args[ 'stamp_ic_button_custom_color' ], '#' )
+		        );
+
+		        WP_CLI::success(
+			        sprintf(
+				        'Instant checkout button color option set: %s',
+				        $assoc_args[ 'stamp_ic_button_custom_color' ]
+			        )
+		        );
+	        }
         }
 	}
 }

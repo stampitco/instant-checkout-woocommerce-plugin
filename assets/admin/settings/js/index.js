@@ -2,12 +2,19 @@ import $ from 'jquery';
 
 import './validators';
 import SettingsForm from './SettingsForm';
+import StylingForm from "./StylingForm";
 
 $(function() {
-    const $settings_form = $( '#stamp-ic-wc-settings-form' );
-    if( $settings_form.length > 0 ) {
+    const $settingsForm = $( '#stamp-ic-wc-settings-form' );
+    if( $settingsForm.length > 0 ) {
         new SettingsForm( {
-            $element: $settings_form
+            $element: $settingsForm
+        } );
+    }
+    const $stylingForm = $( '#stamp-ic-wc-styling-form' );
+    if( $stylingForm.length > 0 ) {
+        new StylingForm( {
+            $element: $stylingForm
         } );
     }
 });

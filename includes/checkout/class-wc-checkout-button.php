@@ -7,28 +7,49 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Stamp_IC_WC_Checkout_Button {
 
+	/* @var Stamp_IC_WC_Settings_Repository $settings_repository */
+	protected $settings_repository;
+
+	/**
+	 * @return Stamp_IC_WC_Settings_Repository
+	 */
+	public function get_settings_repository() {
+		return $this->settings_repository;
+	}
+
+	public function set_settings_repository( Stamp_IC_WC_Settings_Repository $settings_repository ) {
+		$this->settings_repository = $settings_repository;
+		return $this;
+	}
+
     public function show_checkout_button() {
 
 	    $attributes = array(
 		    'class' => array(
-			    'woocommerce-button',
+			    'stamp-ic-checkout-button',
 			    'button',
 			    'alt',
-			    'stamp-ic-checkout-button',
+			    'checkout',
+			    'checkout-button'
 		    ),
 		    'href' => '#',
 		    'type' => 'button',
-		    'id' => 'stamp-ic-checkout-button',
+		    'style' => array(),
 	    );
 
-	    if( is_cart()) {
+	    if( current_filter() !== 'woocommerce_after_add_to_cart_button' ) {
 		    $attributes[ 'class' ][] = 'wc-forward';
-		    $attributes[ 'class' ][] = 'checkout-button';
+	    }
+
+	    $button_color = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CHECKOUT_BUTTON_COLOR );
+
+	    if( ! empty( $button_color ) ) {
+		    $attributes[ 'style' ]['background'] = '#' . $button_color;
 	    }
 
         $attributes = apply_filters( 'stamp_ic_checkout_button_attributes', $attributes );
 
-        $element = apply_filters( 'stamp_ic_checkout_button_element', is_cart() ? 'link' : 'button' ) === 'button' ? 'button' : 'link';
+        $element = apply_filters( 'stamp_ic_checkout_button_element', is_product() ? 'button' : 'link' ) === 'button' ? 'button' : 'link';
 
         if( $element === 'button' && ! empty( $attributes[ 'href' ] ) ) {
             unset( $attributes[ 'href' ] );
@@ -41,10 +62,28 @@ class Stamp_IC_WC_Checkout_Button {
         $attributes_string = '';
 
         foreach ( $attributes as $attribute => $value ) {
+
             if( ! empty( $attributes_string ) ) {
                 $attributes_string .= ' ';
             }
-            $attributes_string .= $attribute . '="' . esc_attr( is_array( $value ) ? implode( ' ', $value ) : $value ) . '"';
+
+            if( $attribute === 'style' ) {
+
+            	$style = '';
+
+            	foreach ( $value as $property => $property_value ) {
+		            $style .= esc_attr( $property ) . ':' . esc_attr( $property_value ) . ';';
+	            }
+
+            	$value = $style;
+
+            } else {
+	            $value = is_array( $value ) ? implode( ' ', $value ) : $value;
+            }
+
+			if( ! empty( $value ) ) {
+				$attributes_string .= $attribute . '="' . esc_attr( $value ) . '"';
+			}
         }
 
         $html = array(
@@ -77,6 +116,7 @@ class Stamp_IC_WC_Checkout_Button {
 	    }
 
 	    add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'show_checkout_button' ) );
-	    add_action( 'woocommerce_proceed_to_checkout', array( $this, 'show_checkout_button' ), 999 );
+	    add_action( 'woocommerce_widget_shopping_cart_buttons', array( $this, 'show_checkout_button' ), 9999 );
+	    add_action( 'woocommerce_proceed_to_checkout', array( $this, 'show_checkout_button' ), 9999 );
     }
 }
