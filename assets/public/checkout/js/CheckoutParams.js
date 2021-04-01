@@ -4,6 +4,8 @@ import {
     GET_CHECKOUT_PARAMS_ERROR,
 } from './events';
 
+import {  isButtonFromMiniCart } from './helpers';
+
 /**
  * CheckoutParams constructor
  *
@@ -19,7 +21,7 @@ CheckoutParams.prototype.get = function get() {
     if( this.options.isProductPage() ) {
         return this.getFromProductPage();
     }
-    if( this.options.isCartPage() ) {
+    if( this.options.isCartPage() || isButtonFromMiniCart( this.$button ) ) {
         return this.getFromCartPage();
     }
     return null;

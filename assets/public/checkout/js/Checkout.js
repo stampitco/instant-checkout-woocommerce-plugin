@@ -6,6 +6,8 @@ import {
     CHECKOUT_ORDER_PLACED,
 } from './events';
 
+import {  isButtonFromMiniCart } from './helpers';
+
 /**
  * Checkout constructor
  *
@@ -40,7 +42,7 @@ Checkout.prototype.onCheckoutOrderPlaced = async function onCheckoutOrderPlaced(
     this.$button.attr( { disabled: true } );
     this.$button.text( this.options.getOrderDoneText() );
 
-    if( this.options.isCartPage() ) {
+    if( this.options.isCartPage() || isButtonFromMiniCart( this.$button ) ) {
         try {
             const result = await this.api.clearCart( {} );
         } catch ( error ) {
@@ -73,19 +75,11 @@ Checkout.prototype.onCheckoutButtonClick = async function onCheckoutButtonClick(
 
     this.$button.attr( { disabled: true } ).addClass( 'stamp-ic-checkout-loading' );
 
-    const buttonIsFromMiniCart = this.$button.parents( '.widget_shopping_cart' ).length > 0;
-
     let params = this.checkoutParams.get();
 
-    if( ! params && ! buttonIsFromMiniCart ) {
+    if( ! params ) {
         this.$button.attr( { disabled: false } ).removeClass( 'stamp-ic-checkout-loading' );
         return;
-    }
-
-    if( buttonIsFromMiniCart ) {
-        params = {
-            'fromCart': true
-        };
     }
 
     this.$button.trigger( GET_CHECKOUT_URL_STARTED, [ params ] );
