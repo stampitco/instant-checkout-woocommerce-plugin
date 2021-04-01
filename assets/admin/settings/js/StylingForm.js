@@ -1,12 +1,26 @@
 import $ from 'jquery';
 
-const StylingForm = function StylingForm( { $element } ) {
+const StylingForm = function StylingForm( { $element, options } ) {
+    /**
+     * @type {jQuery} $element
+     */
     this.$element = $element;
+    /**
+     * @type {Options} options
+     */
+    this.options = options;
+
     this.init();
 }
 
 StylingForm.prototype.init = function init() {
+
     this.$element.parsley();
+
+    if( wp.codeEditor ) {
+        wp.codeEditor.initialize( this.$element.find( 'textarea[name="stamp_ic_button_inline_css"]' ), this.options.getInlineCssEditorSettings() );
+    }
+
     this.bindEvents();
 };
 

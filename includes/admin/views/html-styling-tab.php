@@ -82,6 +82,19 @@ if ( ! defined( 'ABSPATH' ) ) {
                         </div>
 					</td>
 				</tr>
+                <tr class="form-field">
+                    <th scope="row">
+                        <label for="stamp_api_key">
+							<?php _e( 'Inline CSS', STAMP_IC_WC_TEXT_DOMAIN ); ?>
+                        </label>
+                    </th>
+                    <td>
+                        <textarea rows="20" name="stamp_ic_button_inline_css"><?php echo esc_textarea( $button_inline_css ); ?></textarea>
+                        <p>
+		                    <?php _e( 'Enter custom inline css styling.', STAMP_IC_WC_TEXT_DOMAIN ); ?>
+                        </p>
+                    </td>
+                </tr>
 				<tr class="form-field">
 					<th scope="row" colspan="2">
 						<hr>

@@ -187,6 +187,12 @@ class Stamp_IC_WC_Admin_Settings {
 
 		$this->settings_repository->set( Stamp_IC_WC_Settings_Repository::WC_CHECKOUT_BUTTON_COLOR, ltrim( $button_color, '#' ) );
 
+		$button_inline_css = isset( $_POST[ 'stamp_ic_button_inline_css' ] ) ? wc_clean( $_POST[ 'stamp_ic_button_inline_css' ] ) : null;
+
+		if( ! is_null( $button_inline_css ) ) {
+			$this->settings_repository->set( Stamp_IC_WC_Settings_Repository::WC_CHECKOUT_BUTTON_INLINE_CSS, $button_inline_css );
+		}
+
 		$this->get_notifications_repository()->add(
 			Stamp_IC_WC_Settings_Notifications_Repository::SETTINGS,
 			Stamp_IC_WC_Settings_Notification::SUCCESS,
@@ -237,6 +243,7 @@ class Stamp_IC_WC_Admin_Settings {
 		if( $active_tab === 'styling' ) {
 			$button_color = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CHECKOUT_BUTTON_COLOR );
 			$is_custom_button_color = ! in_array( $button_color, array( 'f7e0e2c', '0a1b2e', 'ff4040', ) );
+			$button_inline_css = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CHECKOUT_BUTTON_INLINE_CSS );
 		}
 
 		include __DIR__ . '/views/html-settings.php';

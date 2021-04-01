@@ -1,7 +1,15 @@
 import $ from 'jquery';
 
-const SettingsForm = function SettingsForm( { $element } ) {
+const SettingsForm = function SettingsForm( { $element, options } ) {
+    /**
+     * @type {jQuery} $element
+     */
     this.$element = $element;
+    /**
+     * @type {Options} options
+     */
+    this.options = options;
+
     this.init();
 }
 
