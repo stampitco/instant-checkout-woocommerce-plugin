@@ -17,7 +17,7 @@ class Stamp_IC_WC_Settings_Repository {
 
 	const WC_CHECKOUT_BUTTON_COLOR = 'stamp_ic_wc_checkout_button_color';
 
-	const WC_CHECKOUT_BUTTON_INLINE_CSS = 'stamp_ic_wc_checkout_button_inline_css';
+	const ADDITIONAL_CSS = 'stamp_ic_wc_checkout_additional_css';
 
 	public function get_options() {
 		return array(
@@ -26,7 +26,7 @@ class Stamp_IC_WC_Settings_Repository {
 			static::WC_WEBHOOK_ORDER_UPDATED_ID,
 			static::WC_WEBHOOK_ORDER_DELETED_ID,
 			static::WC_CHECKOUT_BUTTON_COLOR,
-			static::WC_CHECKOUT_BUTTON_INLINE_CSS,
+			static::ADDITIONAL_CSS,
 		);
 	}
 

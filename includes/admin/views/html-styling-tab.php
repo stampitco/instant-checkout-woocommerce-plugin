@@ -31,10 +31,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<label>
 									<input type="radio"
                                            name="stamp_ic_button_color"
-                                           value="f7e0e2c"
+                                           value="f7e0e2"
                                            data-parsley-required
                                            data-parsley-errors-container="#stamp-ic-button-color-error-block"
-										<?php if( $button_color === 'f7e0e2c' && ! $is_custom_button_color ): echo 'checked'; endif; ?>
+										<?php if( $button_color === 'f7e0e2' && ! $is_custom_button_color ): echo 'checked'; endif; ?>
                                     >
 									<?php _e( 'Pink', STAMP_IC_WC_TEXT_DOMAIN ) ?>
                                     <code>#f7e0e2c</code>
@@ -83,15 +83,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</td>
 				</tr>
                 <tr class="form-field">
+                    <th scope="row" colspan="2">
+                        <hr>
+                    </th>
+                </tr>
+                <tr class="form-field">
+                    <th colspan="2" style="padding-bottom: 0;padding-top: 0;">
+                        <h2>
+							<?php _e( 'Styling:', STAMP_IC_WC_TEXT_DOMAIN ) ?>
+                        </h2>
+                    </th>
+                </tr>
+                <tr class="form-field">
                     <th scope="row">
-                        <label for="stamp_api_key">
-							<?php _e( 'Inline CSS', STAMP_IC_WC_TEXT_DOMAIN ); ?>
+                        <label for="stamp_ic_additional_css">
+							<?php _e( 'Additional CSS', STAMP_IC_WC_TEXT_DOMAIN ); ?>
                         </label>
                     </th>
                     <td>
-                        <textarea rows="20" name="stamp_ic_button_inline_css"><?php echo esc_textarea( $button_inline_css ); ?></textarea>
+                        <textarea rows="20" name="stamp_ic_additional_css"><?php echo esc_textarea( $additional_css ); ?></textarea>
                         <p>
-		                    <?php _e( 'Enter custom inline css styling.', STAMP_IC_WC_TEXT_DOMAIN ); ?>
+		                    <?php _e( 'Enter custom css styling.', STAMP_IC_WC_TEXT_DOMAIN ); ?>
                         </p>
                     </td>
                 </tr>

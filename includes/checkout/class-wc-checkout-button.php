@@ -47,29 +47,6 @@ class Stamp_IC_WC_Checkout_Button {
 		    $attributes[ 'style' ][ 'background' ] = '#' . $button_color;
 	    }
 
-	    $button_inline_css = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CHECKOUT_BUTTON_INLINE_CSS );
-
-	    if( ! empty( $button_inline_css ) ) {
-
-		    $button_inline_css = explode( ';', $button_inline_css );
-
-		    if( is_array( $button_inline_css ) ) {
-
-		    	foreach ( $button_inline_css as $css_property ) {
-
-		    		if( empty( $css_property ) ) {
-		    			continue;
-				    }
-
-				    $css_property = explode( ':', $css_property );
-
-				    if( is_array( $css_property ) && count( $css_property ) === 2 ) {
-					    $attributes[ 'style' ][ trim( $css_property[ 0 ] ) ] = trim( $css_property[ 1 ] );
-				    }
-			    }
-		    }
-	    }
-
         $attributes = apply_filters( 'stamp_ic_checkout_button_attributes', $attributes );
 
         $element = apply_filters( 'stamp_ic_checkout_button_element', is_product() ? 'button' : 'link' ) === 'button' ? 'button' : 'link';

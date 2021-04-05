@@ -177,6 +177,11 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 
 	public function enqueue_style( Stamp_IC_WC_Abstract_Style $style, $in_admin = false ) {
 		if( apply_filters( 'stamp_ic_wc_should_enqueue_style', $style->should_enqueue(), $style ) ) {
+
+			if( is_callable( array( $style, 'before_enqueue' ) ) ) {
+				$style->before_enqueue();
+			}
+
 			wp_enqueue_style(
 				$style->name(),
 				$style->url(),
@@ -184,6 +189,10 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 				$style->version(),
 				$style->media()
 			);
+
+			if( is_callable( array( $style, 'after_enqueue' ) ) ) {
+				$style->after_enqueue();
+			}
 		}
 		return $this;
 	}
