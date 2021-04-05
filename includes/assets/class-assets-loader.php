@@ -7,6 +7,9 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 
+	/* @var Stamp_IC_WC_Settings_Repository $settings_repository */
+	protected $settings_repository;
+
 	protected $admin_scripts = array();
 
 	protected $admin_styles = array();
@@ -16,6 +19,9 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	protected $public_styles = array();
 
 	public function init() {
+
+		$this->set_settings_repository( new Stamp_IC_WC_Settings_Repository() );
+
 		$this->set_admin_scripts( array(
 			new Stamp_IC_WC_Admin_Settings_Script(),
 		) );
@@ -25,8 +31,12 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 		$this->set_public_scripts( array(
 			new Stamp_IC_WC_Checkout_Script(),
 		) );
+
+		$wc_checkout_public_style = new Stamp_IC_WC_Checkout_Style();
+		$wc_checkout_public_style->set_settings_repository( $this->get_settings_repository() );
+
 		$this->set_public_styles( array(
-			new Stamp_IC_WC_Checkout_Style(),
+			$wc_checkout_public_style,
 		) );
 	}
 
@@ -194,6 +204,24 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 				$style->after_enqueue();
 			}
 		}
+		return $this;
+	}
+
+	/**
+	 * @return Stamp_IC_WC_Settings_Repository
+	 */
+	public function get_settings_repository() {
+		return $this->settings_repository;
+	}
+
+	/**
+	 * @param Stamp_IC_WC_Settings_Repository $settings_repository
+	 *
+	 * @return Stamp_IC_WC_Assets_Loader
+	 */
+	public function set_settings_repository( Stamp_IC_WC_Settings_Repository $settings_repository ) {
+		$this->settings_repository = $settings_repository;
+
 		return $this;
 	}
 }

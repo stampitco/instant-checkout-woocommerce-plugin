@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 										<?php if( $button_color === 'f7e0e2' && ! $is_custom_button_color ): echo 'checked'; endif; ?>
                                     >
 									<?php _e( 'Pink', STAMP_IC_WC_TEXT_DOMAIN ) ?>
-                                    <code>#f7e0e2c</code>
+                                    <code>#f7e0e2</code>
 								</label>
 							</li>
 							<li class="radio-list-item">
