@@ -48,6 +48,7 @@ class Stamp_IC_WC_Admin_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 		if( is_admin() && current_user_can( 'manage_woocommerce' ) ) {
 			add_action( 'admin_menu', array( $this->get_admin_settings(), 'register_admin_menu_items' ) );
 			add_action( 'init', array( $this->get_admin_settings(), 'save_settings' ), 15 );
+			add_action( 'init', array( $this->get_admin_settings(), 'save_styling' ), 15 );
 			add_action( 'init', array( $this->get_admin_settings(), 'test_stamp_api_credentials' ), 20 );
 			add_filter( 'plugin_action_links_instant-checkout-woocommerce/instant-checkout-woocommerce.php', array( $this->get_admin_settings(), 'add_settings_link' ) );
 		}

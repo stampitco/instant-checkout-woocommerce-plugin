@@ -6,6 +6,8 @@ import {
     CHECKOUT_ORDER_PLACED,
 } from './events';
 
+import {  isButtonFromMiniCart } from './helpers';
+
 /**
  * Checkout constructor
  *
@@ -40,7 +42,7 @@ Checkout.prototype.onCheckoutOrderPlaced = async function onCheckoutOrderPlaced(
     this.$button.attr( { disabled: true } );
     this.$button.text( this.options.getOrderDoneText() );
 
-    if( this.options.isCartPage() ) {
+    if( this.options.isCartPage() || isButtonFromMiniCart( this.$button ) ) {
         try {
             const result = await this.api.clearCart( {} );
         } catch ( error ) {
@@ -73,7 +75,7 @@ Checkout.prototype.onCheckoutButtonClick = async function onCheckoutButtonClick(
 
     this.$button.attr( { disabled: true } ).addClass( 'stamp-ic-checkout-loading' );
 
-    const params = this.checkoutParams.get();
+    let params = this.checkoutParams.get();
 
     if( ! params ) {
         this.$button.attr( { disabled: false } ).removeClass( 'stamp-ic-checkout-loading' );
@@ -85,11 +87,11 @@ Checkout.prototype.onCheckoutButtonClick = async function onCheckoutButtonClick(
 
     const data = {};
 
-    if(params.hasOwnProperty('fromCart')) {
+    if( params.hasOwnProperty('fromCart') ) {
         data['fromCart'] = true;
     }
 
-    if(params.hasOwnProperty('items')) {
+    if( params.hasOwnProperty('items') ) {
         data['items'] = params.items;
     }
 

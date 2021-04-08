@@ -7,6 +7,9 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 
+	/* @var Stamp_IC_WC_Settings_Repository $settings_repository */
+	protected $settings_repository;
+
 	protected $admin_scripts = array();
 
 	protected $admin_styles = array();
@@ -16,6 +19,9 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	protected $public_styles = array();
 
 	public function init() {
+
+		$this->set_settings_repository( new Stamp_IC_WC_Settings_Repository() );
+
 		$this->set_admin_scripts( array(
 			new Stamp_IC_WC_Admin_Settings_Script(),
 		) );
@@ -25,8 +31,12 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 		$this->set_public_scripts( array(
 			new Stamp_IC_WC_Checkout_Script(),
 		) );
+
+		$wc_checkout_public_style = new Stamp_IC_WC_Checkout_Style();
+		$wc_checkout_public_style->set_settings_repository( $this->get_settings_repository() );
+
 		$this->set_public_styles( array(
-			new Stamp_IC_WC_Checkout_Style(),
+			$wc_checkout_public_style,
 		) );
 	}
 
@@ -150,6 +160,10 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 	public function enqueue_script( Stamp_IC_WC_Abstract_Script $script, $in_admin = false ) {
 		if( apply_filters( 'stamp_ic_wc_should_enqueue_script', $script->should_enqueue(), $script ) ) {
 
+			if( is_callable( array( $script, 'before_enqueue' ) ) ) {
+				$script->before_enqueue();
+			}
+
 			wp_enqueue_script(
 				$script->name(),
 				$script->url(),
@@ -163,12 +177,21 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 			if( ! empty( $data ) ) {
 				wp_localize_script( $script->name(), $script->name(), $data );
 			}
+
+			if( is_callable( array( $script, 'after_enqueue' ) ) ) {
+				$script->after_enqueue();
+			}
 		}
 		return $this;
 	}
 
 	public function enqueue_style( Stamp_IC_WC_Abstract_Style $style, $in_admin = false ) {
 		if( apply_filters( 'stamp_ic_wc_should_enqueue_style', $style->should_enqueue(), $style ) ) {
+
+			if( is_callable( array( $style, 'before_enqueue' ) ) ) {
+				$style->before_enqueue();
+			}
+
 			wp_enqueue_style(
 				$style->name(),
 				$style->url(),
@@ -176,7 +199,29 @@ class Stamp_IC_WC_Assets_Loader extends Stamp_IC_WooCommerce_Abstract_Loader {
 				$style->version(),
 				$style->media()
 			);
+
+			if( is_callable( array( $style, 'after_enqueue' ) ) ) {
+				$style->after_enqueue();
+			}
 		}
+		return $this;
+	}
+
+	/**
+	 * @return Stamp_IC_WC_Settings_Repository
+	 */
+	public function get_settings_repository() {
+		return $this->settings_repository;
+	}
+
+	/**
+	 * @param Stamp_IC_WC_Settings_Repository $settings_repository
+	 *
+	 * @return Stamp_IC_WC_Assets_Loader
+	 */
+	public function set_settings_repository( Stamp_IC_WC_Settings_Repository $settings_repository ) {
+		$this->settings_repository = $settings_repository;
+
 		return $this;
 	}
 }

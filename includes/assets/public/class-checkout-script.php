@@ -24,7 +24,7 @@ class Stamp_IC_WC_Checkout_Script extends Stamp_IC_WC_Abstract_Script {
 	}
 
 	public function should_enqueue() {
-		return ( function_exists( 'is_product' ) && is_product() ) || ( function_exists( 'is_cart' ) && is_cart() );
+		return true;
 	}
 
 	public function data( array $params = array() ) {

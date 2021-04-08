@@ -1,10 +1,40 @@
-#stamp-ic-wc-settings-form {
-  .form-field {
-    .parsley-errors-list {
-      color: red;
+:root {
+  --color: rebeccapurple;
+}
+
+#wc-ic-settings-page {
+  .nav-tab {
+    &:first-of-type {
+      margin-left: 0;
     }
   }
-  .submit {
-    padding-bottom: 0;
+  .stamp-ic-wc-form {
+    .form-field {
+      .parsley-errors-list {
+        color: red;
+      }
+    }
+    .submit {
+      padding-bottom: 0;
+    }
+    ul.radio-list {
+      li.radio-list-item {
+        input[type=radio] {
+          &:checked {
+            +label:before {
+              background: #fff;
+            }
+          }
+
+
+          +label:before {
+            border: 2px solid #000;
+            box-shadow: 0 0 0 2px #fff;
+            background: #000;
+          }
+        }
+      }
+    }
   }
 }
+

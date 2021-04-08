@@ -15,12 +15,18 @@ class Stamp_IC_WC_Settings_Repository {
 
 	const WC_WEBHOOK_ORDER_DELETED_ID = 'stamp_ic_wc_webhook_order_deleted_id';
 
+	const WC_CHECKOUT_BUTTON_COLOR = 'stamp_ic_wc_checkout_button_color';
+
+	const ADDITIONAL_CSS = 'stamp_ic_wc_checkout_additional_css';
+
 	public function get_options() {
 		return array(
 			static::STAMP_API_KEY,
 			static::WC_CREDENTIALS_ID,
 			static::WC_WEBHOOK_ORDER_UPDATED_ID,
 			static::WC_WEBHOOK_ORDER_DELETED_ID,
+			static::WC_CHECKOUT_BUTTON_COLOR,
+			static::ADDITIONAL_CSS,
 		);
 	}
 

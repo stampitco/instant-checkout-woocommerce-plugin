@@ -23,4 +23,10 @@ class Stamp_IC_WC_Admin_Settings_Style extends Stamp_IC_WC_Abstract_Style {
 			'settings_page_stamp-ic-wc',
 		) );
 	}
+
+	public function deps() {
+		return array(
+			'wp-codemirror'
+		);
+	}
 }
