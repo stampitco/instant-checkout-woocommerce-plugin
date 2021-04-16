@@ -43,7 +43,7 @@ class Stamp_IC_WC_Checkout_Button {
 
 	    $button_color = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CHECKOUT_BUTTON_COLOR );
 
-	    if( ! empty( $button_color ) ) {
+	    if( ! empty( $button_color ) && $button_color !== 'theme_default' ) {
 		    $attributes[ 'style' ][ 'background' ] = '#' . $button_color;
 	    }
 

@@ -27,6 +27,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</th>
 					<td>
 						<ul class="radio-list">
+
+                            <li class="radio-list-item">
+                                <label>
+                                    <input type="radio"
+                                           name="stamp_ic_button_color"
+                                           value="theme_default"
+                                           data-parsley-required
+                                           data-parsley-errors-container="#stamp-ic-button-color-error-block"
+										<?php if( $button_color === 'theme_default' && ! $is_custom_button_color ): echo 'checked'; endif; ?>
+                                    >
+									<?php _e( 'Theme default', STAMP_IC_WC_TEXT_DOMAIN ) ?>
+                                </label>
+                            </li>
 							<li class="radio-list-item">
 								<label>
 									<input type="radio"

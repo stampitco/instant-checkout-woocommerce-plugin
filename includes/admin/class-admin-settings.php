@@ -241,8 +241,14 @@ class Stamp_IC_WC_Admin_Settings {
 		}
 
 		if( $active_tab === 'styling' ) {
+
 			$button_color = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::WC_CHECKOUT_BUTTON_COLOR );
-			$is_custom_button_color = ! in_array( $button_color, array( 'f7e0e2', '0a1b2e', 'ff4040', ) );
+
+			if( empty( $button_color ) ) {
+				$button_color = 'theme_default';
+			}
+
+			$is_custom_button_color = ! in_array( $button_color, array( 'f7e0e2', '0a1b2e', 'ff4040', 'theme_default' ) );
 			$additional_css = $this->settings_repository->get( Stamp_IC_WC_Settings_Repository::ADDITIONAL_CSS );
 		}
 
